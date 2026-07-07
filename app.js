@@ -109,8 +109,8 @@ const categoryGroups = {
 /* LOADER */
 /* ================================================= */
 
-window.addEventListener(
-"load",
+document.addEventListener(
+"DOMContentLoaded",
 () => {
 
 const loader =
@@ -638,7 +638,7 @@ if (groups) {
                 <div class="product-image">
 
                     <img
-                    src="${product.image}"
+                    src="${product.image}" loading="lazy"
                     alt="${product.name}">
 
                 </div>
@@ -716,7 +716,7 @@ if (groups) {
             <div class="product-image">
 
                 <img
-                src="${product.image}"
+                src="${product.image}" loading="lazy"
                 alt="${product.name}">
 
             </div>
