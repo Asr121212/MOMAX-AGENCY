@@ -2196,7 +2196,7 @@ body {
     html, body {
         overflow-x: hidden !important;
         width: 100% !important;
-        background-color: #ffffff; /* نفس خلفية الكمبيوتر النظيفة */
+        background-color: #ffffff; 
     }
 
     * {
@@ -2213,7 +2213,7 @@ body {
         width: 100% !important;
         padding: 12px 15px !important;
         border: 1px solid #e0e0e0 !important;
-        border-radius: 30px !important; /* مظهر انسيابي مثل الكمبيوتر */
+        border-radius: 30px !important; 
         font-size: 14px !important;
         margin: 10px 0 !important;
     }
@@ -2228,7 +2228,7 @@ body {
     }
     
     .categories-container::-webkit-scrollbar {
-        display: none !important; /* إخفاء شريط التمرير لمظهر أنيق */
+        display: none !important; 
     }
 
     .category-btn {
@@ -2254,12 +2254,11 @@ body {
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        transition: transform 0.2s !important;
     }
 
     .product-image {
         width: 100% !important;
-        height: 160px !important; /* ارتفاع متناسق للصور على الجوال */
+        height: 160px !important; 
         background: #fafafa !important;
         border-radius: 6px !important;
         overflow: hidden !important;
@@ -2275,7 +2274,6 @@ body {
     /* 3. نافذة تفاصيل المنتج المنبثقة (Modal) */
     #productModal, .modal-overlay {
         padding: 15px !important;
-        background: rgba(0, 0, 0, 0.6) !important; /* تعتيم خلفي فخم */
     }
 
     #modalBody, .modal-content {
@@ -2284,7 +2282,7 @@ body {
         border-radius: 16px !important;
         padding: 20px !important;
         max-height: 85vh !important;
-        overflow-y: auto !important; /* السماح بالتمرير الداخلي إذا كان النص طويلاً */
+        overflow-y: auto !important; 
     }
 
     /* ترتيب محتويات النافذة عمودياً لتناسب شاشة الجوال */
@@ -2299,40 +2297,23 @@ body {
         object-fit: contain !important;
     }
 
-    /* 4. سلة المشتريات الجانبية (نفس فكرة الكمبيوتر ولكن بعرض مناسب) */
+    /* 4. حل مشكلة سلة المشتريات (السلة الجانبية) */
+    /* تم مسح الأكواد التي تجبر السلة على الظهور، مع الاحتفاظ بالعرض المتناسق */
     #cartDrawer, .cart-drawer {
-        width: 85% !important; /* تغطي 85% من الشاشة ليبقى جزء بسيط يظهر الخلفية كالمواقع العالمية */
+        width: 85% !important; 
         max-width: 360px !important;
-        height: 100% !important;
-        position: fixed !important;
-        top: 0 !important;
-        right: 0 !important;
-        background: #ffffff !important;
-        box-shadow: -5px 0 25px rgba(0,0,0,0.15) !important;
-        display: flex !important;
-        flex-direction: column !important;
-        z-index: 10000 !important;
     }
 
-    /* الحفاظ على الهيكل الداخلي للسلة مرتباً */
     .cart-header {
-        padding: 20px 15px !important;
-        border-bottom: 1px solid #eee !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
+        padding: 15px 15px !important;
     }
 
     #cartItems {
-        flex: 1 !important;
-        overflow-y: auto !important;
         padding: 15px !important;
     }
 
     .cart-footer {
-        padding: 20px 15px !important;
-        border-top: 1px solid #eee !important;
-        background: #fafafa !important;
+        padding: 15px 15px !important;
     }
 }
 
