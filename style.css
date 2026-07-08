@@ -2188,136 +2188,151 @@ body {
 }
 
 /* ================================================= */
-/* التنسيق الشامل والمثالي لشاشات الجوال */
+/* التنسيق الفاخر والمطابق لتجربة الكمبيوتر على الجوال */
 /* ================================================= */
 @media (max-width: 768px) {
     
-    /* منع أي عنصر من الخروج عن حدود شاشة الهاتف نهائياً */
+    /* ضبط أساسيات الصفحة لمنع أي اهتزاز أو خروج عن الحدود */
+    html, body {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        background-color: #ffffff; /* نفس خلفية الكمبيوتر النظيفة */
+    }
+
     * {
-        max-width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    body, html {
-        overflow-x: hidden !important;
-        width: 100% !important;
-        font-size: 14px; /* حجم خط مريح للجوال */
-    }
-
-    /* تحويل الحاويات الكبيرة والعريضة إلى عرض مرن 100% */
-    .container, .wrapper, main, section, footer, header, nav, .hero {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding-left: 12px !important;
-        padding-right: 12px !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        float: none !important;
-    }
-
-    /* ضبط الهيدر (شريط أعلى الصفحة) لترتيب الشعار والعناصر بشكل أنيق */
+    /* 1. الهيدر وشريط البحث والأقسام */
     header, .header-container {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
+        padding: 15px !important;
         text-align: center !important;
-        gap: 12px !important;
-        padding: 15px 10px !important;
     }
 
-    /* شريط البحث: جعله يأخذ العرض كاملاً وبمظهر انسيابي */
-    #searchInput, .search-bar, .search-input {
+    #searchInput {
         width: 100% !important;
-        max-width: 100% !important;
+        padding: 12px 15px !important;
+        border: 1px solid #e0e0e0 !important;
+        border-radius: 30px !important; /* مظهر انسيابي مثل الكمبيوتر */
+        font-size: 14px !important;
         margin: 10px 0 !important;
-        padding: 12px !important;
-        border-radius: 8px !important;
     }
 
-    /* أزرار الأقسام: جعلها تترتب أفقياً في سطر واحد قابل للتمرير بالإصبع (Scroll) دون أن تنزل تحت بعضها وتخرب المظهر */
-    .categories-container, .categories-nav, .categories-wrapper, .tags-container {
+    /* جعل الأقسام مصفوفة في سطر واحد مرن يتحرك بالإصبع لمنع النزول العشوائي */
+    .categories-container, .categories-wrapper {
         display: flex !important;
         overflow-x: auto !important;
         white-space: nowrap !important;
-        width: 100% !important;
-        padding: 8px 4px !important;
-        gap: 8px !important;
-        -webkit-overflow-scrolling: touch; /* تمرير ناعم على هواتف آيفون */
+        gap: 10px !important;
+        padding: 5px 0 12px 0 !important;
+    }
+    
+    .categories-container::-webkit-scrollbar {
+        display: none !important; /* إخفاء شريط التمرير لمظهر أنيق */
     }
 
-    /* منع الأزرار من الانضغاط أو التشوّه أثناء التمرير */
-    .category-btn, .tab-btn {
+    .category-btn {
         flex: 0 0 auto !important;
-        padding: 8px 16px !important;
+        padding: 8px 18px !important;
         font-size: 13px !important;
+        border-radius: 20px !important;
     }
 
-    /* شبكة المنتجات: عرض (منتجين 2) متجاورين في كل سطر بشكل متناسق ومحاذاة ممتازة */
-    #productsGrid, .products-grid {
+    /* 2. شبكة المنتجات (عرض كرتين متناسقين في كل سطر) */
+    #productsGrid {
         display: grid !important;
         grid-template-columns: repeat(2, 1fr) !important;
-        gap: 12px !important;
-        padding: 15px 0 !important;
-        width: 100% !important;
+        gap: 15px !important;
+        padding: 10px !important;
     }
 
-    /* كرت المنتج: تنظيم العناصر داخله عمودياً لمنع التداخل بين الصورة والنصوص */
     .product-card {
-        width: 100% !important;
+        background: #ffffff !important;
+        border: 1px solid #f0f0f0 !important;
+        border-radius: 8px !important;
+        padding: 12px !important;
         display: flex !important;
         flex-direction: column !important;
         justify-content: space-between !important;
-        padding: 10px !important;
-        border-radius: 12px !important;
-        background: #ffffff !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
-        margin: 0 !important;
-        border: 1px solid #f0f0f0 !important;
+        transition: transform 0.2s !important;
     }
 
-    /* إجبار حاوية الصورة على اتخاذ أبعاد ثابتة ومربعة تناسب الجوال */
     .product-image {
         width: 100% !important;
-        height: 150px !important; /* ارتفاع مثالي لصور المنتجات على الموبايل */
+        height: 160px !important; /* ارتفاع متناسق للصور على الجوال */
+        background: #fafafa !important;
+        border-radius: 6px !important;
         overflow: hidden !important;
-        border-radius: 8px !important;
-        margin-bottom: 8px !important;
+        margin-bottom: 10px !important;
     }
 
-    /* ضبط الصورة نفسها لتملأ المربع بدون تمدد أو تشويه */
     .product-image img {
         width: 100% !important;
         height: 100% !important;
-        object-fit: cover !important;
+        object-fit: contain !important; /* المحافظة على أبعاد العطور والأجهزة بدون تمطيط */
     }
 
-    /* نصوص المنتج (الاسم والوصف والسعر) */
-    .product-info {
-        padding: 4px 0 !important;
-        text-align: center !important;
+    /* 3. نافذة تفاصيل المنتج المنبثقة (Modal) */
+    #productModal, .modal-overlay {
+        padding: 15px !important;
+        background: rgba(0, 0, 0, 0.6) !important; /* تعتيم خلفي فخم */
     }
 
-    .product-info h3, .product-title {
-        font-size: 13px !important;
-        margin: 4px 0 !important;
-        line-height: 1.4 !important;
-        height: 38px !important; /* توحيد الارتفاع لكي تصبح الكروت على خط واحد */
-        overflow: hidden !important;
-    }
-
-    .product-price {
-        font-size: 14px !important;
-        font-weight: bold !important;
-        margin: 6px 0 !important;
-    }
-
-    /* زر الإضافة إلى السلة */
-    .add-to-cart-btn, .buy-btn {
+    #modalBody, .modal-content {
         width: 100% !important;
-        padding: 10px !important;
-        font-size: 12px !important;
-        border-radius: 6px !important;
-        margin-top: auto !important; /* يدفع الزر دائماً لأسفل الكرت */
+        max-width: 420px !important;
+        border-radius: 16px !important;
+        padding: 20px !important;
+        max-height: 85vh !important;
+        overflow-y: auto !important; /* السماح بالتمرير الداخلي إذا كان النص طويلاً */
+    }
+
+    /* ترتيب محتويات النافذة عمودياً لتناسب شاشة الجوال */
+    .modal-grid, .modal-layout, #modalBody > div {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .modal-image-container img {
+        max-height: 200px !important;
+        object-fit: contain !important;
+    }
+
+    /* 4. سلة المشتريات الجانبية (نفس فكرة الكمبيوتر ولكن بعرض مناسب) */
+    #cartDrawer, .cart-drawer {
+        width: 85% !important; /* تغطي 85% من الشاشة ليبقى جزء بسيط يظهر الخلفية كالمواقع العالمية */
+        max-width: 360px !important;
+        height: 100% !important;
+        position: fixed !important;
+        top: 0 !important;
+        right: 0 !important;
+        background: #ffffff !important;
+        box-shadow: -5px 0 25px rgba(0,0,0,0.15) !important;
+        display: flex !important;
+        flex-direction: column !important;
+        z-index: 10000 !important;
+    }
+
+    /* الحفاظ على الهيكل الداخلي للسلة مرتباً */
+    .cart-header {
+        padding: 20px 15px !important;
+        border-bottom: 1px solid #eee !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    #cartItems {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        padding: 15px !important;
+    }
+
+    .cart-footer {
+        padding: 20px 15px !important;
+        border-top: 1px solid #eee !important;
+        background: #fafafa !important;
     }
 }
 
