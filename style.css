@@ -2188,5 +2188,139 @@ body {
 }
 
 /* ================================================= */
+/* التنسيق الشامل والمثالي لشاشات الجوال */
+/* ================================================= */
+@media (max-width: 768px) {
+    
+    /* منع أي عنصر من الخروج عن حدود شاشة الهاتف نهائياً */
+    * {
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    body, html {
+        overflow-x: hidden !important;
+        width: 100% !important;
+        font-size: 14px; /* حجم خط مريح للجوال */
+    }
+
+    /* تحويل الحاويات الكبيرة والعريضة إلى عرض مرن 100% */
+    .container, .wrapper, main, section, footer, header, nav, .hero {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        float: none !important;
+    }
+
+    /* ضبط الهيدر (شريط أعلى الصفحة) لترتيب الشعار والعناصر بشكل أنيق */
+    header, .header-container {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        text-align: center !important;
+        gap: 12px !important;
+        padding: 15px 10px !important;
+    }
+
+    /* شريط البحث: جعله يأخذ العرض كاملاً وبمظهر انسيابي */
+    #searchInput, .search-bar, .search-input {
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 10px 0 !important;
+        padding: 12px !important;
+        border-radius: 8px !important;
+    }
+
+    /* أزرار الأقسام: جعلها تترتب أفقياً في سطر واحد قابل للتمرير بالإصبع (Scroll) دون أن تنزل تحت بعضها وتخرب المظهر */
+    .categories-container, .categories-nav, .categories-wrapper, .tags-container {
+        display: flex !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+        width: 100% !important;
+        padding: 8px 4px !important;
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch; /* تمرير ناعم على هواتف آيفون */
+    }
+
+    /* منع الأزرار من الانضغاط أو التشوّه أثناء التمرير */
+    .category-btn, .tab-btn {
+        flex: 0 0 auto !important;
+        padding: 8px 16px !important;
+        font-size: 13px !important;
+    }
+
+    /* شبكة المنتجات: عرض (منتجين 2) متجاورين في كل سطر بشكل متناسق ومحاذاة ممتازة */
+    #productsGrid, .products-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        padding: 15px 0 !important;
+        width: 100% !important;
+    }
+
+    /* كرت المنتج: تنظيم العناصر داخله عمودياً لمنع التداخل بين الصورة والنصوص */
+    .product-card {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: space-between !important;
+        padding: 10px !important;
+        border-radius: 12px !important;
+        background: #ffffff !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+        margin: 0 !important;
+        border: 1px solid #f0f0f0 !important;
+    }
+
+    /* إجبار حاوية الصورة على اتخاذ أبعاد ثابتة ومربعة تناسب الجوال */
+    .product-image {
+        width: 100% !important;
+        height: 150px !important; /* ارتفاع مثالي لصور المنتجات على الموبايل */
+        overflow: hidden !important;
+        border-radius: 8px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* ضبط الصورة نفسها لتملأ المربع بدون تمدد أو تشويه */
+    .product-image img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+
+    /* نصوص المنتج (الاسم والوصف والسعر) */
+    .product-info {
+        padding: 4px 0 !important;
+        text-align: center !important;
+    }
+
+    .product-info h3, .product-title {
+        font-size: 13px !important;
+        margin: 4px 0 !important;
+        line-height: 1.4 !important;
+        height: 38px !important; /* توحيد الارتفاع لكي تصبح الكروت على خط واحد */
+        overflow: hidden !important;
+    }
+
+    .product-price {
+        font-size: 14px !important;
+        font-weight: bold !important;
+        margin: 6px 0 !important;
+    }
+
+    /* زر الإضافة إلى السلة */
+    .add-to-cart-btn, .buy-btn {
+        width: 100% !important;
+        padding: 10px !important;
+        font-size: 12px !important;
+        border-radius: 6px !important;
+        margin-top: auto !important; /* يدفع الزر دائماً لأسفل الكرت */
+    }
+}
+
+/* ================================================= */
 /* END STYLE V7 */
 /* ================================================= */
