@@ -2187,46 +2187,98 @@ body {
     margin:-5px 0 15px;
 }
 
-/* ================================================= */
-/* تنسيقات خاصة بشاشات الجوال (Responsive Design) */
-/* ================================================= */
-@media (max-width: 768px) {
-    
-    /* جعل الحاويات الرئيسية مرنة ولا تخرج عن الشاشة */
-    .container, .wrapper, header, nav, section, footer, main {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding-left: 10px !important;
-        padding-right: 10px !important;
-        box-sizing: border-box !important;
-    }
+@media (max-width:768px){
 
-    /* ضبط شبكة المنتجات لتعرض منتجين (2) في كل سطر بشكل أنيق بدلاً من الاختفاء */
-    #productsGrid, .products-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
-        padding: 5px !important;
-    }
+.container{
+    width:95%;
+    padding:0 15px;
+}
 
-    /* ضبط حجم كرت المنتج ليناسب المساحة الجديدة */
-    .product-card {
-        width: 100% !important;
-        margin: 0 !important;
-        padding: 8px !important;
-    }
+.header-content{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
 
-    /* التأكد من أن صور المنتجات مرنة ولا تتمدد بشكل مشوه */
-    .product-image img {
-        width: 100% !important;
-        height: auto !important;
-        object-fit: cover !important;
-    }
-    
-    /* إذا كان لديك بنر عريض في الأعلى (Hero) نجعله يناسب الجوال */
-    .hero, .hero-content {
-        padding: 20px 10px !important;
-        text-align: center !important;
-    }
+.logo-wrapper{
+    justify-content:center;
+    text-align:center;
+}
+
+.search-wrapper{
+    width:100%;
+    max-width:100%;
+}
+
+.search-input{
+    width:100%;
+}
+
+.header-actions{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    gap:10px;
+}
+
+.categories-scroll{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    flex-wrap:nowrap;
+    padding-bottom:10px;
+}
+
+.categories-scroll::-webkit-scrollbar{
+    display:none;
+}
+
+.category-btn{
+    flex:none;
+    white-space:nowrap;
+}
+
+.products-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:15px;
+}
+
+.product-card{
+    width:100%;
+}
+
+.product-image{
+    height:170px;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+}
+
+.hero-title-image{
+    max-width:320px;
+}
+
+.hero-buttons{
+    flex-direction:column;
+}
+
+.hero-btn{
+    width:100%;
+}
+
+.cart-drawer{
+    width:100%;
+}
+
+.modal-body{
+    display:flex;
+    flex-direction:column;
+}
+
 }
 
 /* ================================================= */
