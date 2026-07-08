@@ -4,6 +4,19 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
 
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+*,
+*::before,
+*::after{
+    box-sizing:border-box;
+}
+
 /* ================================================= */
 /* ROOT */
 /* ================================================= */
@@ -2086,49 +2099,23 @@ body {
 @media (max-width:768px){
 
     .header-content{
-
-        flex-direction:column;
-
-    }
-
-    .search-wrapper{
-
-        width:100%;
-
-        max-width:none;
-
-    }
-
-    .hero-title{
-
-        font-size:3rem;
-
+        gap:16px;
     }
 
     .products-grid{
-
-        grid-template-columns:1fr;
-
+        grid-template-columns:repeat(2,1fr);
+        gap:20px;
     }
 
     .cart-drawer{
-
-        width:100%;
-
-        left:-100%;
-
+        width:380px;
+        max-width:100%;
     }
 
     .modal-body{
-
-        padding:25px;
-
-    }
-
-    .modal-title{
-
-        font-size:2rem;
-
+        width:95%;
+        max-width:700px;
+        padding:35px;
     }
 
 }
