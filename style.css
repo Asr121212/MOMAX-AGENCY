@@ -2100,25 +2100,20 @@ body {
     }
 
     .header-content{
-    display:grid;
-    grid-template-columns:90px 1fr auto;
-    grid-template-areas:
-        "logo brand actions"
-        "search search search";
+    display:flex;
+    flex-wrap:wrap;
     align-items:center;
-    gap:12px;
+    justify-content:space-between;
+    gap:15px;
+}
 }
 
 .logo-wrapper{
-    display:contents;
-}
-
-.logo{
-    grid-area:logo;
-}
-
-.brand-info{
-    grid-area:brand;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    flex:1;
+    min-width:0;
 }
 
 .header-actions{
@@ -2128,8 +2123,13 @@ body {
     margin-top:0;
 }
 
+.brand-info{
+    flex:1;
+    min-width:0;
+}
+
 .brand-info h1{
-    font-size:1.9rem;
+    font-size:2rem;
     line-height:1.1;
 }
 
