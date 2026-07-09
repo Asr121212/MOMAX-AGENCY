@@ -4,6 +4,19 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap');
 
+html,
+body{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+}
+
+*,
+*::before,
+*::after{
+    box-sizing:border-box;
+}
+
 /* ================================================= */
 /* ROOT */
 /* ================================================= */
@@ -562,18 +575,12 @@ body {
 
 }
 
-.header-content {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 24px;
-
-    padding: 18px 0;
-
+.header-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
 }
 
 .logo-wrapper {
@@ -635,11 +642,13 @@ body {
 /* SEARCH */
 /* ================================================= */
 
-.search-wrapper {
+.search-wrapper{
 
-    flex: 1;
+    flex:1;
 
-    max-width: 650px;
+    min-width:220px;
+
+    max-width:650px;
 
 }
 
@@ -2085,50 +2094,79 @@ body {
 
 @media (max-width:768px){
 
+    .container{
+        width:95%;
+        margin:auto;
+    }
+
     .header-content{
+        display:flex;
+        flex-direction:row;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+    }
 
-        flex-direction:column;
+    .logo-wrapper{
+        flex:1;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    }
 
+    .brand-info{
+        flex:1;
+    }
+
+    .brand-info h1{
+        font-size:2rem;
+        line-height:1.2;
+    }
+
+    .brand-info p{
+        font-size:1rem;
+    }
+
+    .logo{
+        width:72px;
+        height:72px;
+        flex-shrink:0;
     }
 
     .search-wrapper{
-
         width:100%;
-
         max-width:none;
-
+        margin-top:20px;
     }
 
-    .hero-title{
-
-        font-size:3rem;
-
+    .header-actions{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        gap:12px;
+        margin-top:20px;
     }
 
     .products-grid{
-
-        grid-template-columns:1fr;
-
+        grid-template-columns:repeat(2,1fr);
     }
 
     .cart-drawer{
-
         width:100%;
-
         left:-100%;
+    }
 
+    .cart-drawer.open{
+        left:0;
+    }
+
+    .modal-content{
+        width:95%;
+        max-height:90vh;
     }
 
     .modal-body{
-
-        padding:25px;
-
-    }
-
-    .modal-title{
-
-        font-size:2rem;
-
+        padding:20px;
     }
 
 }
@@ -2187,99 +2225,6 @@ body {
     margin:-5px 0 15px;
 }
 
-@media (max-width:768px){
-
-.container{
-    width:95%;
-    padding:0 15px;
-}
-
-.header-content{
-    display:flex;
-    flex-direction:column;
-    gap:15px;
-}
-
-.logo-wrapper{
-    justify-content:center;
-    text-align:center;
-}
-
-.search-wrapper{
-    width:100%;
-    max-width:100%;
-}
-
-.search-input{
-    width:100%;
-}
-
-.header-actions{
-    width:100%;
-    display:flex;
-    justify-content:center;
-    gap:10px;
-}
-
-.categories-scroll{
-    display:flex;
-    overflow-x:auto;
-    gap:10px;
-    flex-wrap:nowrap;
-    padding-bottom:10px;
-}
-
-.categories-scroll::-webkit-scrollbar{
-    display:none;
-}
-
-.category-btn{
-    flex:none;
-    white-space:nowrap;
-}
-
-.products-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:15px;
-}
-
-.product-card{
-    width:100%;
-}
-
-.product-image{
-    height:170px;
-}
-
-.product-image img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-}
-
-.hero-title-image{
-    max-width:320px;
-}
-
-.hero-buttons{
-    flex-direction:column;
-}
-
-.hero-btn{
-    width:100%;
-}
-
-.cart-drawer{
-    width:100%;
-}
-
-.modal-body{
-    display:flex;
-    flex-direction:column;
-}
-
-}
 
 /* ================================================= */
 /* END STYLE V7 */
