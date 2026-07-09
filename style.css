@@ -575,18 +575,12 @@ body {
 
 }
 
-.header-content {
-
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    gap: 24px;
-
-    padding: 18px 0;
-
+.header-content{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
 }
 
 .logo-wrapper {
@@ -648,11 +642,13 @@ body {
 /* SEARCH */
 /* ================================================= */
 
-.search-wrapper {
+.search-wrapper{
 
-    flex: 1;
+    flex:1;
 
-    max-width: 650px;
+    min-width:220px;
+
+    max-width:650px;
 
 }
 
@@ -2098,24 +2094,99 @@ body {
 
 @media (max-width:768px){
 
+    .container{
+        width:95%;
+        margin:auto;
+    }
+
     .header-content{
-        gap:16px;
+    display:grid;
+    grid-template-columns:70px 1fr;
+    grid-template-areas:
+        "logo actions"
+        "search search";
+    align-items:center;
+    gap:15px;
+}
+
+.logo-wrapper{
+    grid-area:logo;
+}
+
+.header-actions{
+    grid-area:actions;
+    justify-content:flex-end;
+    width:auto;
+    margin-top:0;
+}
+
+.search-wrapper{
+    grid-area:search;
+    width:100%;
+    max-width:none;
+    margin-top:0;
+}
+
+    .logo-wrapper{
+        flex:1;
+        display:flex;
+        align-items:center;
+        gap:10px;
+    }
+
+    .brand-info{
+        flex:1;
+    }
+
+    .brand-info h1{
+        font-size:2rem;
+        line-height:1.2;
+    }
+
+    .brand-info p{
+        font-size:1rem;
+    }
+
+    .logo{
+        width:72px;
+        height:72px;
+        flex-shrink:0;
+    }
+
+    .search-wrapper{
+        width:100%;
+        max-width:none;
+        margin-top:20px;
+    }
+
+    .header-actions{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        gap:12px;
+        margin-top:20px;
     }
 
     .products-grid{
         grid-template-columns:repeat(2,1fr);
-        gap:20px;
     }
 
     .cart-drawer{
-        width:380px;
-        max-width:100%;
+        width:100%;
+        left:-100%;
+    }
+
+    .cart-drawer.open{
+        left:0;
+    }
+
+    .modal-content{
+        width:95%;
+        max-height:90vh;
     }
 
     .modal-body{
-        width:95%;
-        max-width:700px;
-        padding:35px;
+        padding:20px;
     }
 
 }
