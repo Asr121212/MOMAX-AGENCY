@@ -51,6 +51,12 @@ document.getElementById("cartItems");
 const cartCount =
 document.getElementById("cartCount");
 
+const floatingCart =
+document.getElementById("floatingCart");
+
+const floatingCartCount =
+document.getElementById("floatingCartCount");
+
 const cartTotal =
 document.getElementById("cartTotal");
 
@@ -257,6 +263,11 @@ openCartBtn?.addEventListener(
 openCart
 );
 
+floatingCart?.addEventListener(
+"click",
+openCart
+);
+
 closeCartBtn?.addEventListener(
 "click",
 closeCart
@@ -455,6 +466,23 @@ onclick="removeFromCart(${item.id})">
 });
 
 cartCount.textContent = count;
+
+if(floatingCartCount){
+
+    floatingCartCount.textContent = count;
+
+}
+
+if(floatingCart){
+
+    floatingCart.classList.remove("cart-pop");
+
+    void floatingCart.offsetWidth;
+
+    floatingCart.classList.add("cart-pop");
+
+}
+
 cartTotal.textContent = total;
 
 saveCart();
@@ -571,9 +599,8 @@ currentCategory === "الكل"
 product.category === currentCategory;
 
 const searchMatch =
-product.name
-.toLowerCase()
-.includes(keyword);
+product.name.toLowerCase().includes(keyword) ||
+String(product.id).includes(keyword);
 
 return categoryMatch && searchMatch;
 

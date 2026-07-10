@@ -2244,6 +2244,200 @@ body {
 
 }
 
+/* ========================================= */
+/* FLOATING CART */
+/* ========================================= */
+
+.floating-cart{
+
+    display:none;
+
+}
+
+@media (max-width:768px){
+
+.floating-cart{
+
+    position:fixed;
+
+    bottom:20px;
+
+    left:20px;
+
+    width:64px;
+
+    height:64px;
+
+    border:none;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        135deg,
+        var(--primary),
+        var(--primary-light)
+    );
+
+    color:#fff;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:28px;
+
+    cursor:pointer;
+
+    z-index:9999;
+
+    box-shadow:0 12px 35px rgba(124,58,237,.35);
+
+    transition:.25s;
+
+}
+
+.floating-cart:active{
+
+    transform:scale(.95);
+
+}
+
+.floating-cart-count{
+
+    position:absolute;
+
+    top:-6px;
+
+    right:-6px;
+
+    width:26px;
+
+    height:26px;
+
+    border-radius:50%;
+
+    background:#fff;
+
+    color:var(--primary);
+
+    font-size:.8rem;
+
+    font-weight:900;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.cart-pop{
+
+    animation:cartPop .35s;
+
+}
+
+@keyframes cartPop{
+
+0%{
+
+transform:scale(1);
+
+}
+
+50%{
+
+transform:scale(1.18);
+
+}
+
+100%{
+
+transform:scale(1);
+
+}
+
+}
+
+}
+
+@media (max-width:768px){
+
+.header{
+
+padding:8px 0;
+
+}
+
+.logo{
+
+width:56px;
+
+height:56px;
+
+}
+
+.brand-info h1{
+
+font-size:1.1rem;
+
+}
+
+.brand-info span{
+
+display:none;
+
+}
+
+.search-wrapper{
+
+order:3;
+
+width:100%;
+
+max-width:none;
+
+}
+
+.search-input{
+
+height:50px;
+
+font-size:.95rem;
+
+border-radius:14px;
+
+}
+
+.header-actions{
+
+gap:8px;
+
+}
+
+.theme-toggle{
+
+width:48px;
+
+height:48px;
+
+border-radius:14px;
+
+font-size:1rem;
+
+}
+
+.cart-button{
+
+display:none;
+
+}
+
+}
+
 /* ================================================= */
 /* END STYLE V7 */
 /* ================================================= */
