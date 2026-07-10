@@ -1193,7 +1193,7 @@ body {
 /* PRODUCT CARD */
 /* ================================================= */
 
-..product-card{
+.product-card{
 
     background:var(--surface);
 
