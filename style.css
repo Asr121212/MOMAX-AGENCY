@@ -1854,9 +1854,10 @@ body {
 @media (max-width:768px){
 
     .cart-drawer{
-        width:85%;
-        left:-85%;
-    }
+    width:85%;
+    max-width:380px;
+    left:-85%;
+}
 
     .cart-drawer.show{
         left:0;
@@ -2098,9 +2099,10 @@ body {
     /* CART */
 
     .cart-drawer{
-        width:85%;
-        left:-85%;
-    }
+    width:85%;
+    max-width:380px;
+    left:-85%;
+}
 
     .cart-drawer.show{
         left:0;
