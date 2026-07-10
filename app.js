@@ -468,6 +468,16 @@ onclick="removeFromCart(${item.id})">
 cartCount.textContent = count;
 
 if(floatingCartCount){
+floatingCartCount.textContent = count;
+}
+
+if(floatingCart){
+floatingCart.classList.remove("cart-pop");
+void floatingCart.offsetWidth;
+floatingCart.classList.add("cart-pop");
+}
+
+if(floatingCartCount){
 
     floatingCartCount.textContent = count;
 
