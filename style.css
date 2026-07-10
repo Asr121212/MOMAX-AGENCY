@@ -1854,8 +1854,8 @@ body {
 @media (max-width:768px){
 
     .cart-drawer{
-        width:100%;
-        left:-100%;
+        width:85%;
+        left:-85%;
     }
 
     .cart-drawer.show{
@@ -2098,8 +2098,8 @@ body {
     /* CART */
 
     .cart-drawer{
-        width:100%;
-        left:-100%;
+        width:85%;
+        left:-85%;
     }
 
     .cart-drawer.show{
