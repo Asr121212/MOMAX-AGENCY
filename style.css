@@ -1688,6 +1688,7 @@ body {
 
 .cart-drawer{
     position:fixed;
+    border: 5px solid red !important;
     top:0;
     left:-460px;
     width:460px;
