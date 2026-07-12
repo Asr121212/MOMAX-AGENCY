@@ -4,112 +4,132 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MOMAX | موماكس</title>
-    <meta name="description" content="أفضل الإكسسوارات الإلكترونية بجودة عالية وأسعار مميزة">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="متجر موماكس الرسمي - أفضل الإكسسوارات الإلكترونية بجودة عالية وأسعار مميزة">
+    <meta name="theme-color" content="#7C3AED">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="theme-light">
 
-    <header class="header">
-        <div class="header-top container">
-            <div class="logo-area">
-                <img src="images/logo.png" alt="MOMAX Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZWVlIi8+PC9zdmc+'">
-                <h1 class="brand-name">موماكس</h1>
+    <div id="globalLoader" class="global-loader">
+        <div class="cube-wrapper">
+            <div class="cube">
+                <div class="cube-face face-front">MOMAX</div>
+                <div class="cube-face face-back">موماكس</div>
+                <div class="cube-face face-top">3D</div>
+                <div class="cube-face face-bottom">QUALITY</div>
+                <div class="cube-face face-left">MAX</div>
+                <div class="cube-face face-right">STORE</div>
             </div>
-            <div class="desktop-actions">
-                <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle Theme">🌙</button>
-                <button id="desktopCartBtn" class="cart-btn" aria-label="Open Cart">
-                    🛒 <span class="cart-badge">0</span>
+        </div>
+    </div>
+
+    <header class="main-header">
+        <div class="header-container container">
+            <div class="brand-identity">
+                <img src="images/logo.png" alt="MOMAX Logo" class="brand-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjN0MzQUVEIi8+PC9zdmc+'">
+                <div class="brand-title-group">
+                    <span class="logo-text-en">MOMAX</span>
+                    <span class="logo-divider">|</span>
+                    <span class="logo-text-ar">موماكس</span>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <button id="themeToggle" class="action-circle-btn" aria-label="تبديل الوضع">🌙</button>
+                <button id="desktopCartTrigger" class="desktop-cart-btn">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-counter-badge total-cart-count">0</span>
                 </button>
             </div>
         </div>
         
-        <div class="search-container container">
-            <div class="search-box">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو برقم المنتج (ID)..." aria-label="Search products">
+        <div class="search-section container">
+            <div class="search-wrapper">
+                <span class="search-inside-icon">🔍</span>
+                <input type="text" id="productSearchInput" placeholder="ابحث باسم المنتج أو رقم الـ ID الخاص به...">
+                <button id="clearSearchBtn" class="clear-search-btn hidden">✕</button>
             </div>
         </div>
 
-        <div class="categories-wrapper">
-            <div class="categories-scroll container" id="categoriesContainer">
+        <div class="categories-navigation">
+            <div class="categories-scroll-box container" id="categoriesChipsWrapper">
                 </div>
         </div>
     </header>
 
-    <main class="main-content container">
-        <div class="product-grid" id="productGrid">
+    <main class="main-storefront container">
+        <div class="products-3d-grid" id="productsDynamicGrid">
             </div>
         
-        <div id="noResults" class="no-results hidden">
-            <span class="no-results-icon">📦</span>
-            <h3>لم يتم العثور على منتجات</h3>
-            <p>جرب البحث بكلمات مختلفة أو تحقق من رقم المنتج.</p>
+        <div id="searchEmptyState" class="empty-state-view hidden">
+            <div class="empty-box-3d">📦</div>
+            <h3>عذراً، لم نجد ما تبحث عنه!</h3>
+            <p>تأكد من كتابة اسم المنتج بشكل صحيح أو التحقق من رقم ال ID.</p>
         </div>
     </main>
 
-    <div id="productSheetOverlay" class="overlay hidden"></div>
-    <div id="productSheet" class="bottom-sheet hidden">
-        <div class="sheet-header">
-            <div class="sheet-handle"></div>
-            <button id="closeSheetBtn" class="close-btn" aria-label="Close">✕</button>
+    <div id="sheetDimOverlay" class="sheet-dim-overlay hidden"></div>
+    <div id="productDetailsSheet" class="product-bottom-sheet hidden">
+        <div class="sheet-drag-handle-bar">
+            <div class="drag-line"></div>
+            <button id="closeSheetCross" class="sheet-close-cross">✕</button>
         </div>
-        <div class="sheet-content" id="sheetContent">
+        <div class="sheet-scrollable-body" id="productSheetInteractiveContent">
             </div>
     </div>
 
-    <div id="cartDrawerOverlay" class="overlay hidden"></div>
-    <div id="cartDrawer" class="cart-drawer hidden">
-        <div class="cart-header">
-            <h2>سلة المشتريات</h2>
-            <button id="closeCartBtn" class="close-btn" aria-label="Close Cart">✕</button>
+    <div id="cartDrawerDimOverlay" class="sheet-dim-overlay hidden"></div>
+    <div id="shoppingCartDrawer" class="shopping-cart-drawer hidden">
+        <div class="drawer-header-section">
+            <h2>سلة التسوق الذكية</h2>
+            <button id="closeCartDrawerBtn" class="sheet-close-cross">✕</button>
         </div>
-        <div class="cart-items" id="cartItemsContainer">
+        <div class="drawer-items-list" id="cartDrawerItemsContainer">
             </div>
-        <div class="cart-footer">
-            <div class="cart-summary">
-                <span>الإجمالي:</span>
-                <strong class="total-price" id="cartTotal">0 ر.ي</strong>
+        <div class="drawer-footer-checkout">
+            <div class="checkout-summary-row">
+                <span>إجمالي الطلب:</span>
+                <span id="cartTotalPriceSum" class="total-price-highlight">0 ر.ي</span>
             </div>
-            <div class="cart-actions">
-                <button id="clearCartBtn" class="btn btn-outline">إفراغ السلة</button>
-                <button id="whatsappCheckoutBtn" class="btn btn-primary">إرسال الطلب عبر واتساب 💬</button>
+            <div class="checkout-buttons-group">
+                <button id="clearEntireCartBtn" class="btn-secondary-action">إفراغ السلة</button>
+                <button id="sendOrderToWhatsappBtn" class="btn-primary-whatsapp">إرسال الطلب عبر واتساب 💬</button>
             </div>
         </div>
     </div>
 
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="window.scrollTo(0,0)">
-            <span class="nav-icon">🏠</span>
-            <span class="nav-text">الرئيسية</span>
+    <nav class="mobile-sticky-navigation">
+        <button class="mobile-nav-link active" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+            <span class="nav-btn-icon">🏠</span>
+            <span class="nav-btn-text">الرئيسية</span>
         </button>
-        <button class="nav-item" id="mobileSearchBtn">
-            <span class="nav-icon">🔍</span>
-            <span class="nav-text">بحث</span>
+        <button class="mobile-nav-link" id="mobileSearchFocusTrigger">
+            <span class="nav-btn-icon">🔍</span>
+            <span class="nav-btn-text">بحث</span>
         </button>
-        <button class="nav-item" id="mobileCartBtn">
-            <div class="nav-icon-wrapper">
-                <span class="nav-icon">🛒</span>
-                <span class="cart-badge mobile-badge">0</span>
+        <button class="mobile-nav-link" id="mobileCartTrigger">
+            <div class="nav-btn-icon-wrapper">
+                <span class="nav-btn-icon">🛒</span>
+                <span class="cart-counter-badge total-cart-count mobile-badge">0</span>
             </div>
-            <span class="nav-text">السلة</span>
+            <span class="nav-btn-text">السلة</span>
         </button>
-        <button class="nav-item" id="mobileWhatsappBtn">
-            <span class="nav-icon">💬</span>
-            <span class="nav-text">واتساب</span>
+        <button class="mobile-nav-link" id="mobileDirectWhatsappLink">
+            <span class="nav-btn-icon">💬</span>
+            <span class="nav-btn-text">واتساب</span>
         </button>
     </nav>
 
-    <button id="backToTopBtn" class="back-to-top hidden" aria-label="Back to Top">⬆️</button>
+    <button id="scrollToTopFloatingBtn" class="scroll-to-top-btn hidden" aria-label="العودة لأعلى الشاشة">⬆️</button>
 
-    <footer class="footer">
-        <div class="container">
-            <p>موماكس © 2026. الجودة ماكس.</p>
+    <footer class="modern-footer">
+        <div class="container footer-layout">
+            <p class="footer-copyright">جميع الحقوق محفوظة © 2026 لموقع <span class="brand-accent-text">MOMAX</span>. اطلب موماكس، تلقى الجودة ماكس.</p>
         </div>
     </footer>
 

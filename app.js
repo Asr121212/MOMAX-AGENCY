@@ -1,205 +1,227 @@
 /* ================================================= */
-/* MOMAX REDESIGN LOGIC - VANILLA JS                 */
+/* منطق تشغيل متجر موماكس V8 - VANILLA JS            */
 /* ================================================= */
 
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Elements
-    const productGrid = document.getElementById('productGrid');
-    const categoriesContainer = document.getElementById('categoriesContainer');
-    const searchInput = document.getElementById('searchInput');
-    const noResults = document.getElementById('noResults');
+    // ربط العناصر النشطة بـ DOM
+    const productsDynamicGrid = document.getElementById('productsDynamicGrid');
+    const categoriesChipsWrapper = document.getElementById('categoriesChipsWrapper');
+    const productSearchInput = document.getElementById('productSearchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+    const searchEmptyState = document.getElementById('searchEmptyState');
     
-    // Cart Elements
-    const cartDrawer = document.getElementById('cartDrawer');
-    const cartDrawerOverlay = document.getElementById('cartDrawerOverlay');
-    const cartItemsContainer = document.getElementById('cartItemsContainer');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const cartBadges = document.querySelectorAll('.cart-badge');
+    // عناصر التحكم في السلة
+    const shoppingCartDrawer = document.getElementById('shoppingCartDrawer');
+    const cartDrawerDimOverlay = document.getElementById('cartDrawerDimOverlay');
+    const cartDrawerItemsContainer = document.getElementById('cartDrawerItemsContainer');
+    const cartTotalPriceSum = document.getElementById('cartTotalPriceSum');
+    const totalCartCountBadges = document.querySelectorAll('.total-cart-count');
     
-    // Sheet Elements
-    const productSheet = document.getElementById('productSheet');
-    const productSheetOverlay = document.getElementById('productSheetOverlay');
-    const sheetContent = document.getElementById('sheetContent');
+    // عناصر التحكم في الـ Bottom Sheet لتفاصيل المنتج الوصفية
+    const productDetailsSheet = document.getElementById('productDetailsSheet');
+    const sheetDimOverlay = document.getElementById('sheetDimOverlay');
+    const productSheetInteractiveContent = document.getElementById('productSheetInteractiveContent');
     
-    // State
-    let currentCategory = 'الكل';
-    let searchQuery = '';
-    let cart = JSON.parse(localStorage.getItem('momax_v8_cart')) || [];
+    // حاله التطبيق الداخلية (State)
+    let selectedActiveCategory = 'الكل';
+    let realTimeSearchQuery = '';
+    let userShoppingBag = JSON.parse(localStorage.getItem('momax_v8_bag_store')) || [];
     
-    // Extract unique categories and add 'الكل'
-    const categories = ['الكل', ...new Set(products.map(p => p.category))];
+    // استخراج التصنيفات بشكل فريد وتضمين خيار "الكل" في البداية
+    const uniqueStoreCategories = ['الكل', ...new Set(products.map(item => item.category))];
 
     // =================================================
-    // INITIALIZATION
+    // دالة الإقلاع والتجهيز الأولي للواجهات
     // =================================================
-    function init() {
-        initTheme();
-        renderCategories();
-        renderProducts();
-        updateCartUI();
-        setupEventListeners();
-        setupLazyLoading();
+    function bootstrapStore() {
+        setupThemeMechanics();
+        renderFilterChips();
+        renderProductsView();
+        syncCartStateWithUI();
+        registerGlobalEventListeners();
+        dismissGlobalLoader();
+    }
+
+    // إخفاء شاشة التحميل الترحيبية
+    function dismissGlobalLoader() {
+        const loader = document.getElementById('globalLoader');
+        if(loader) {
+            setTimeout(() => {
+                loader.classList.add('fade-out');
+            }, 400);
+        }
     }
 
     // =================================================
-    // RENDER FUNCTIONS
+    // بناء وحقن واجهات التصنيفات
     // =================================================
-    function renderCategories() {
-        categoriesContainer.innerHTML = categories.map(cat => `
-            <button class="chip ${cat === currentCategory ? 'active' : ''}" data-category="${cat}">
+    function renderFilterChips() {
+        categoriesChipsWrapper.innerHTML = uniqueStoreCategories.map(cat => `
+            <button class="category-chip ${cat === selectedActiveCategory ? 'active' : ''}" data-cat-name="${cat}">
                 ${cat}
             </button>
         `).join('');
     }
 
-    function renderProducts() {
-        let filtered = products.filter(p => {
-            const matchCategory = currentCategory === 'الكل' || p.category === currentCategory;
-            // Search matches name or EXACT ID
-            const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                                p.id.toString() === searchQuery.trim();
-            return matchCategory && matchSearch;
+    // =================================================
+    // بناء وعرض المنتجات بالتأثير ثلاثي الأبعاد والـ Skeletons
+    // =================================================
+    function renderProductsView() {
+        // فلترة المنتجات بالاسم أو بمطابقة الـ ID المدخل بدقة
+        let matchingProducts = products.filter(item => {
+            const isCategoryMatch = selectedActiveCategory === 'الكل' || item.category === selectedActiveCategory;
+            const isSearchMatch = item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) || 
+                                  item.id.toString() === realTimeSearchQuery.trim();
+            return isCategoryMatch && isSearchMatch;
         });
 
-        if (filtered.length === 0) {
-            productGrid.innerHTML = '';
-            noResults.classList.remove('hidden');
+        if (matchingProducts.length === 0) {
+            productsDynamicGrid.innerHTML = '';
+            searchEmptyState.classList.remove('hidden');
             return;
         }
 
-        noResults.classList.add('hidden');
+        searchEmptyState.classList.add('hidden');
         
-        // Show Skeletons first for better perceived performance
-        productGrid.innerHTML = filtered.map(() => `
-            <div class="product-card">
-                <div class="card-img-wrapper"><div class="skeleton skeleton-img"></div></div>
-                <div class="card-body">
-                    <div class="skeleton skeleton-text short"></div>
-                    <div class="skeleton skeleton-text"></div>
-                    <div class="skeleton skeleton-text"></div>
-                    <div class="skeleton skeleton-btn"></div>
+        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading) لتحسين تجربة المستخدم الملموسة
+        productsDynamicGrid.innerHTML = matchingProducts.map(() => `
+            <div class="product-card-3d">
+                <div class="card-image-view-3d"><div class="skeleton-box skeleton-img-placeholder"></div></div>
+                <div class="card-info-details">
+                    <div class="skeleton-box skeleton-text-line short"></div>
+                    <div class="skeleton-box skeleton-text-line"></div>
+                    <div class="skeleton-box skeleton-text-line"></div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:auto;">
+                        <div class="skeleton-box skeleton-text-line short" style="margin:0; width:50px;"></div>
+                        <div class="skeleton-box skeleton-btn-circle"></div>
+                    </div>
                 </div>
             </div>
         `).join('');
 
-        // Simulate short network delay to process images, then render real cards
+        // حقن المنتجات الحقيقية بعد جزء من الثانية لمنح المتصفح انسيابية في التقديم والـ Lazy Loading
         setTimeout(() => {
-            productGrid.innerHTML = filtered.map(product => `
-                <div class="product-card" onclick="openProductSheet(${product.id})">
-                    <div class="card-img-wrapper">
-                        <div class="skeleton skeleton-img"></div>
-                        <img data-src="${product.image}" alt="${product.name}" onload="this.classList.add('loaded'); this.previousElementSibling.remove();">
+            productsDynamicGrid.innerHTML = matchingProducts.map(prod => `
+                <div class="product-card-3d" onclick="triggerProductBottomSheet(${prod.id})">
+                    <div class="card-image-view-3d">
+                        <div class="skeleton-box skeleton-img-placeholder"></div>
+                        <img data-src="${prod.image}" alt="${prod.name}" onload="this.classList.add('image-loaded'); this.previousElementSibling.remove();">
                     </div>
-                    <div class="card-body">
-                        <div class="card-category">${product.category}</div>
-                        <div class="card-title">${product.name}</div>
-                        <div class="card-id">ID: ${product.id}</div>
-                        <div class="card-price">${product.price || 'أسعار مميزة'} ر.ي</div>
-                        <div class="card-actions">
-                            <button class="btn-add" onclick="event.stopPropagation(); addToCart(${product.id})">أضف للسلة</button>
+                    <div class="card-info-details">
+                        <div class="card-brand-tag">${prod.category}</div>
+                        <h3 class="card-product-title">${prod.name}</h3>
+                        <div class="card-id-badge">ID: ${prod.id}</div>
+                        <div class="card-footer-pricing">
+                            <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
+                            <button class="card-add-to-cart-btn" onclick="event.stopPropagation(); addItemToBag(${prod.id})">＋</button>
                         </div>
                     </div>
                 </div>
             `).join('');
-            setupLazyLoading();
-        }, 150);
+            activateIntersectionLazyLoading();
+        }, 120);
     }
 
-    // Lazy Loading Images
-    function setupLazyLoading() {
-        const images = document.querySelectorAll('img[data-src]');
-        const imageObserver = new IntersectionObserver((entries, observer) => {
+    // تفعيل خاصية الـ Lazy Loading الانسيابية للصور عند الاقتراب من الشاشة
+    function activateIntersectionLazyLoading() {
+        const structuralImages = document.querySelectorAll('img[data-src]');
+        const observerInstance = new IntersectionObserver((entries, self) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.getAttribute('data-src');
-                    img.removeAttribute('data-src');
-                    observer.unobserve(img);
+                    const imgNode = entry.target;
+                    imgNode.src = imgNode.getAttribute('data-src');
+                    imgNode.removeAttribute('data-src');
+                    self.unobserve(imgNode);
                 }
             });
-        }, { rootMargin: '50px 0px', threshold: 0.01 });
+        }, { rootMargin: '60px 0px', threshold: 0.01 });
 
-        images.forEach(img => imageObserver.observe(img));
+        structuralImages.forEach(img => observerInstance.observe(img));
     }
 
     // =================================================
-    // CART LOGIC
+    // إدارة منطق السلة التفاعلية (Cart Logic)
     // =================================================
-    window.addToCart = (id) => {
-        const product = products.find(p => p.id === id);
-        if (!product) return;
+    window.addItemToBag = (id) => {
+        const targetedProduct = products.find(p => p.id === id);
+        if (!targetedProduct) return;
         
-        const existing = cart.find(item => item.id === id);
-        if (existing) existing.qty++;
-        else cart.push({ ...product, qty: 1 });
+        const existingRow = userShoppingBag.find(item => item.id === id);
+        if (existingRow) {
+            existingRow.quantity++;
+        } else {
+            userShoppingBag.push({ ...targetedProduct, quantity: 1 });
+        }
         
-        saveCart();
-        updateCartUI();
+        commitBagToLocalStorage();
+        syncCartStateWithUI();
         
-        // Brief visual feedback
-        const btn = event.target;
-        const originalText = btn.innerText;
-        btn.innerText = '✓ تمت الإضافة';
-        btn.style.backgroundColor = 'var(--success)';
-        setTimeout(() => {
-            btn.innerText = originalText;
-            btn.style.backgroundColor = '';
-        }, 1000);
+        // إشعار بصري سريع على زر الإضافة لتأكيد العملية
+        if (event && event.target && event.target.classList.contains('card-add-to-cart-btn')) {
+            const btn = event.target;
+            btn.innerText = '✓';
+            setTimeout(() => btn.innerText = '＋', 800);
+        }
     };
 
-    window.updateQty = (id, change) => {
-        const item = cart.find(i => i.id === id);
-        if (!item) return;
+    window.mutateRowQuantity = (id, changeAmount) => {
+        const itemRow = userShoppingBag.find(i => i.id === id);
+        if (!itemRow) return;
         
-        item.qty += change;
-        if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+        itemRow.quantity += changeAmount;
+        if (itemRow.quantity <= 0) {
+            userShoppingBag = userShoppingBag.filter(i => i.id !== id);
+        }
         
-        saveCart();
-        updateCartUI();
+        commitBagToLocalStorage();
+        syncCartStateWithUI();
     };
 
-    window.removeFromCart = (id) => {
-        cart = cart.filter(i => i.id !== id);
-        saveCart();
-        updateCartUI();
+    window.removeItemFromBagCompletely = (id) => {
+        userShoppingBag = userShoppingBag.filter(i => i.id !== id);
+        commitBagToLocalStorage();
+        syncCartStateWithUI();
     };
 
-    function saveCart() {
-        localStorage.setItem('momax_v8_cart', JSON.stringify(cart));
+    function commitBagToLocalStorage() {
+        localStorage.setItem('momax_v8_bag_store', JSON.stringify(userShoppingBag));
     }
 
-    function updateCartUI() {
-        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+    function syncCartStateWithUI() {
+        const totalItemsCount = userShoppingBag.reduce((acc, current) => acc + current.quantity, 0);
+        // حساب السعر الإجمالي (إذا وجد منتج بدون سعر من المجلد نعتبر قيمته 0 لمنع حدوث أخطاء حسابية NaN)
+        const aggregatedPrice = userShoppingBag.reduce((acc, current) => acc + ((current.price || 0) * current.quantity), 0);
         
-        // Price logic: Many items in products.js lack a 'price' field. Defaulting to 0 for sum if missing.
-        const totalPrice = cart.reduce((sum, item) => sum + ((item.price || 0) * item.qty), 0);
-        
-        cartBadges.forEach(badge => {
-            badge.innerText = totalItems;
-            badge.style.display = totalItems > 0 ? 'inline-block' : 'none';
+        totalCartCountBadges.forEach(badge => {
+            badge.innerText = totalItemsCount;
+            badge.style.display = totalItemsCount > 0 ? 'inline-block' : 'none';
         });
 
-        cartTotalEl.innerText = totalPrice > 0 ? `${totalPrice} ر.ي` : 'حسب الطلب';
+        cartTotalPriceSum.innerText = aggregatedPrice > 0 ? `${aggregatedPrice} ر.ي` : 'حسب الطلب';
 
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<div class="no-results">السلة فارغة</div>';
+        if (userShoppingBag.length === 0) {
+            cartDrawerItemsContainer.innerHTML = `
+                <div class="empty-state-view">
+                    <span style="font-size:2.5rem; display:block; margin-bottom:10px;">🛒</span>
+                    <p>سلة التسوق فارغة حالياً</p>
+                </div>`;
             return;
         }
 
-        cartItemsContainer.innerHTML = cart.map(item => `
-            <div class="cart-item">
-                <img src="${item.image}" alt="${item.name}" class="cart-item-img">
-                <div class="cart-item-info">
-                    <div class="cart-item-title">${item.name}</div>
-                    <div class="cart-item-price">${item.price ? item.price + ' ر.ي' : 'السعر عند الطلب'}</div>
-                    <div class="cart-item-actions">
-                        <div class="qty-controls">
-                            <button onclick="updateQty(${item.id}, -1)">-</button>
-                            <span>${item.qty}</span>
-                            <button onclick="updateQty(${item.id}, 1)">+</button>
+        cartDrawerItemsContainer.innerHTML = userShoppingBag.map(item => `
+            <div class="cart-item-row">
+                <img src="${item.image}" alt="${item.name}" class="cart-item-thumbnail">
+                <div class="cart-item-body-info">
+                    <h4 class="cart-item-title-text">${item.name}</h4>
+                    <div class="cart-item-price-text">${item.price ? item.price + ' ر.ي' : 'السعر عند الطلب'}</div>
+                    <div class="cart-item-interactive-actions">
+                        <div class="quantity-stepper">
+                            <button onclick="mutateRowQuantity(${item.id}, -1)">-</button>
+                            <span class="qty-number">${item.quantity}</span>
+                            <button onclick="mutateRowQuantity(${item.id}, 1)">+</button>
                         </div>
-                        <button class="remove-btn" onclick="removeFromCart(${item.id})">حذف</button>
+                        <button class="cart-row-remove-btn" onclick="removeItemFromBagCompletely(${item.id})">حذف</button>
                     </div>
                 </div>
             </div>
@@ -207,150 +229,187 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================
-    // PRODUCT SHEET (MODAL)
+    // بناء ورقة تفاصيل المنتج واستعراض الوصف الكامل من المجلد
     // =================================================
-    window.openProductSheet = (id) => {
-        const product = products.find(p => p.id === id);
-        if (!product) return;
+    window.triggerProductBottomSheet = (id) => {
+        const prod = products.find(p => p.id === id);
+        if (!prod) return;
 
-        sheetContent.innerHTML = `
-            <div class="sheet-img-container">
-                <img src="${product.image}" alt="${product.name}">
+        // التحقق من وجود وصف للمنتج أو تزويده بعبارة تسويقية فخمة إذا لم يضاف له بعد
+        const productDescription = prod.description ? prod.description.trim() : "طلبك المميّز من متجر موماكس الرسمي، مصنّع من أفضل المواد وبأعلى معايير الجودة العالمية التي نضمنها لك دائماً.";
+
+        productSheetInteractiveContent.innerHTML = `
+            <div class="sheet-product-gallery-3d">
+                <img src="${prod.image}" alt="${prod.name}">
             </div>
             <div>
-                <div class="sheet-meta">
-                    <span>ID: ${product.id}</span>
-                    <span style="color: var(--primary); font-weight:bold;">${product.category}</span>
+                <div class="sheet-meta-properties">
+                    <span class="card-brand-tag" style="font-size:0.85rem;">${prod.category}</span>
+                    <span style="color:var(--text-muted); font-weight:700;">ID: ${prod.id}</span>
                 </div>
-                <h2 class="sheet-title">${product.name}</h2>
-                <p class="sheet-desc">${product.description || 'لا يوجد وصف متاح حالياً لهذا المنتج.'}</p>
+                <h2 class="sheet-main-title">${prod.name}</h2>
+                <div class="sheet-description-text">
+                    <strong>تفاصيل المنتج ووصفه:</strong>
+                    <p style="margin-top: 6px;">${productDescription}</p>
+                </div>
                 
-                <div class="sheet-price-row">
-                    <span class="sheet-price">${product.price ? product.price + ' ر.ي' : 'السعر عند الطلب'}</span>
+                <div class="sheet-checkout-bar">
+                    <span class="sheet-large-price">${prod.price ? prod.price + ' <span style="font-size:0.9rem">ر.ي</span>' : 'طلب خاص'}</span>
+                    <button class="action-large-btn" onclick="addItemToBag(${prod.id}); dismissProductBottomSheet();">أضف إلى السلة 🛒</button>
                 </div>
-                <button class="btn btn-primary" style="width: 100%" onclick="addToCart(${product.id}); closeSheet();">أضف إلى السلة 🛒</button>
             </div>
         `;
 
-        productSheet.classList.remove('hidden');
-        productSheetOverlay.classList.remove('hidden');
-        // Small delay for CSS transition to trigger
-        setTimeout(() => productSheet.classList.add('open'), 10);
+        productDetailsSheet.classList.remove('hidden');
+        sheetDimOverlay.classList.remove('hidden');
+        setTimeout(() => productDetailsSheet.classList.add('open-active'), 10);
     };
 
-    window.closeSheet = () => {
-        productSheet.classList.remove('open');
+    window.dismissProductBottomSheet = () => {
+        productDetailsSheet.classList.remove('open-active');
         setTimeout(() => {
-            productSheet.classList.add('hidden');
-            productSheetOverlay.classList.add('hidden');
-        }, 300); // match CSS transition duration
+            productDetailsSheet.classList.add('hidden');
+            sheetDimOverlay.classList.add('hidden');
+        }, 300);
     };
 
     // =================================================
-    // EVENT LISTENERS
+    // مستمعي الأحداث والربط العام للواجهات (Event Listeners)
     // =================================================
-    function setupEventListeners() {
-        // Category Chips filtering
-        categoriesContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('chip')) {
-                currentCategory = e.target.dataset.category;
-                renderCategories();
-                renderProducts();
+    function registerGlobalEventListeners() {
+        // الفلترة بالضغط على رقاقات التصنيفات أفقياً
+        categoriesChipsWrapper.addEventListener('click', (e) => {
+            const targetBtn = e.target.closest('.category-chip');
+            if (targetBtn) {
+                selectedActiveCategory = targetBtn.dataset.catName;
+                renderFilterChips();
+                renderProductsView();
             }
         });
 
-        // Search Input
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value;
-            renderProducts();
+        // رصد مدخلات حقل البحث والتعامل مع زر المسح السريع
+        productSearchInput.addEventListener('input', (e) => {
+            realTimeSearchQuery = e.target.value;
+            if(realTimeSearchQuery.length > 0) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+            renderProductsView();
         });
 
-        // Cart Drawer Toggles
-        const openCart = () => {
-            cartDrawer.classList.remove('hidden');
-            cartDrawerOverlay.classList.remove('hidden');
-            setTimeout(() => cartDrawer.classList.add('open'), 10);
+        clearSearchBtn.addEventListener('click', () => {
+            productSearchInput.value = '';
+            realTimeSearchQuery = '';
+            clearSearchBtn.classList.add('hidden');
+            renderProductsView();
+            productSearchInput.focus();
+        });
+
+        // منطق النوافذ المنزلقة والأدراج الجانبية للسلة
+        const launchCartDrawer = () => {
+            shoppingCartDrawer.classList.remove('hidden');
+            cartDrawerDimOverlay.classList.remove('hidden');
+            setTimeout(() => shoppingCartDrawer.classList.add('drawer-open-active'), 10);
         };
-        const closeCart = () => {
-            cartDrawer.classList.remove('open');
+        const dismissCartDrawer = () => {
+            shoppingCartDrawer.classList.remove('drawer-open-active');
             setTimeout(() => {
-                cartDrawer.classList.add('hidden');
-                cartDrawerOverlay.classList.add('hidden');
+                shoppingCartDrawer.classList.add('hidden');
+                cartDrawerDimOverlay.classList.add('hidden');
             }, 300);
         };
 
-        document.getElementById('desktopCartBtn')?.addEventListener('click', openCart);
-        document.getElementById('mobileCartBtn')?.addEventListener('click', openCart);
-        document.getElementById('closeCartBtn')?.addEventListener('click', closeCart);
-        cartDrawerOverlay.addEventListener('click', closeCart);
+        document.getElementById('desktopCartTrigger').addEventListener('click', launchCartDrawer);
+        document.getElementById('mobileCartTrigger').addEventListener('click', launchCartDrawer);
+        document.getElementById('closeCartDrawerBtn').addEventListener('click', dismissCartDrawer);
+        cartDrawerDimOverlay.addEventListener('click', dismissCartDrawer);
 
-        // Clear Cart
-        document.getElementById('clearCartBtn').addEventListener('click', () => {
-            cart = [];
-            saveCart();
-            updateCartUI();
-        });
-
-        // WhatsApp Checkout
-        document.getElementById('whatsappCheckoutBtn').addEventListener('click', () => {
-            if (cart.length === 0) return alert('السلة فارغة!');
-            
-            let msg = "مرحباً، أود طلب المنتجات التالية:%0A%0A";
-            cart.forEach(item => {
-                msg += `- ${item.name} (ID: ${item.id}) | العدد: ${item.qty}%0A`;
-            });
-            msg += `%0Aالإجمالي: ${cartTotalEl.innerText}`;
-            
-            window.open(`https://wa.me/?text=${msg}`, '_blank');
-        });
-
-        // Mobile Bottom Nav specific actions
-        document.getElementById('mobileSearchBtn').addEventListener('click', () => {
-            window.scrollTo(0,0);
-            searchInput.focus();
-        });
-        
-        document.getElementById('mobileWhatsappBtn').addEventListener('click', () => {
-            window.open('https://wa.me/', '_blank');
-        });
-
-        // Sheet Closers
-        document.getElementById('closeSheetBtn').addEventListener('click', closeSheet);
-        productSheetOverlay.addEventListener('click', closeSheet);
-
-        // Back to top button logic
-        const bttBtn = document.getElementById('backToTopBtn');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 500) {
-                bttBtn.classList.remove('hidden');
-            } else {
-                bttBtn.classList.add('hidden');
+        // إفراغ السلة
+        document.getElementById('clearEntireCartBtn').addEventListener('click', () => {
+            if(confirm('هل أنت متأكد من رغبتك في إفراغ محتويات السلة بالكامل؟')) {
+                userShoppingBag = [];
+                commitBagToLocalStorage();
+                syncCartStateWithUI();
             }
         });
-        bttBtn.addEventListener('click', () => window.scrollTo(0,0));
+
+        // =================================================
+        // معالجة وإرسال رسالة واتساب المؤتمتة بالـ ID والكمية
+        // =================================================
+        document.getElementById('sendOrderToWhatsappBtn').addEventListener('click', () => {
+            if (userShoppingBag.length === 0) return alert('سلتك فارغة! يرجى إضافة المنتجات أولاً.');
+            
+            let messageBuffer = "📦 *طلب شراء جديد من متجر موماكس MOMAX* %0A%0A";
+            messageBuffer += "مرحباً، أود طلب تفاصيل المنتجات التالية المحددة من موقعكم العام:%0A%0A";
+            
+            userShoppingBag.forEach((item, index) => {
+                messageBuffer += `${index + 1}) *${item.name}*%0A`;
+                messageBuffer += `   - رقم المنتج (ID): ${item.id}%0A`;
+                messageBuffer += `   - الكمية المطلوبة: ${item.quantity}%0A`;
+                messageBuffer += `   - السعر: ${item.price ? item.price + ' ر.ي' : 'السعر عند الطلب'}%0A%0A`;
+            });
+            
+            const totalSumText = cartTotalPriceSum.innerText;
+            messageBuffer += `💰 *إجمالي قيمة المنتجات:* ${totalSumText}%0A%0A`;
+            messageBuffer += "يرجى تأكيد استلام الطلب وتجهيزه للشحن.";
+            
+            // التوجيه المباشر لرقم الواتساب الخاص بك المرفق في الطلب
+            window.open(`https://wa.me/967772748881?text=${messageBuffer}`, '_blank');
+        });
+
+        // محفزات عناصر التحكم السفلية للموبايل
+        document.getElementById('mobileSearchFocusTrigger').addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            productSearchInput.focus();
+        });
         
-        // Theme Toggle
-        document.getElementById('themeToggleBtn')?.addEventListener('click', () => {
+        document.getElementById('mobileDirectWhatsappLink').addEventListener('click', () => {
+            window.open('https://wa.me/967772748881', '_blank');
+        });
+
+        // إغلاق ورقة تفاصيل المنتج السفلية
+        document.getElementById('closeSheetCross').addEventListener('click', dismissProductBottomSheet);
+        sheetDimOverlay.addEventListener('click', dismissProductBottomSheet);
+
+        // زر التحليق والعودة إلى الأعلى
+        const bttFloatingBtn = document.getElementById('scrollToTopFloatingBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 450) {
+                bttFloatingBtn.classList.remove('hidden');
+            } else {
+                bttFloatingBtn.classList.add('hidden');
+            }
+        });
+        bttFloatingBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        
+        // مفتاح التحكم في الوضع الليلي
+        document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('theme-dark');
-            localStorage.setItem('momax_theme', document.body.classList.contains('theme-dark') ? 'dark' : 'light');
-            updateThemeIcon();
+            const isDarkActive = document.body.classList.contains('theme-dark');
+            localStorage.setItem('momax_theme_preference', isDarkActive ? 'dark' : 'light');
+            updateThemeIconIndicator();
         });
     }
 
     // =================================================
-    // THEME HANDLING
+    // تهيئة ميكانيكية وتناسق الوضع الليلي
     // =================================================
-    function initTheme() {
-        const savedTheme = localStorage.getItem('momax_theme');
-        if (savedTheme === 'dark') document.body.classList.add('theme-dark');
-        updateThemeIcon();
+    function setupThemeMechanics() {
+        const preferredTheme = localStorage.getItem('momax_theme_preference');
+        if (preferredTheme === 'dark') {
+            document.body.classList.add('theme-dark');
+        }
+        updateThemeIconIndicator();
     }
     
-    function updateThemeIcon() {
-        const btn = document.getElementById('themeToggleBtn');
-        if(btn) btn.innerText = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+    function updateThemeIconIndicator() {
+        const toggleBtn = document.getElementById('themeToggle');
+        if(toggleBtn) {
+            toggleBtn.innerText = document.body.classList.contains('theme-dark') ? '☀️' : '🌙';
+        }
     }
 
-    // Boot App
-    init();
+    // تشغيل الموقع الفوري وبدء المعالجة
+    bootstrapStore();
 });
