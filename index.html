@@ -1,711 +1,119 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0">
-
-    <title>
-        MOMAX | موماكس
-    </title>
-
-    <meta
-        name="description"
-        content="أفضل الإكسسوارات الإلكترونية بجودة عالية وأسعار مميزة">
-
-    <meta
-        name="theme-color"
-        content="#7C3AED">
-
-    <!-- Cairo Font -->
-
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-    <link
-        rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cairo:wght@200;300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Main CSS -->
-
-    <link
-        rel="stylesheet"
-        href="style.css">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MOMAX | موماكس</title>
+    <meta name="description" content="أفضل الإكسسوارات الإلكترونية بجودة عالية وأسعار مميزة">
+    <meta name="theme-color" content="#ffffff">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style.css">
 </head>
-
-<body class="theme-light">
-
-    <!-- ========================= -->
-    <!-- LOADER -->
-    <!-- ========================= -->
-
-    <div id="loader" class="loader">
-
-        <div class="loader-content">
-
-            <img
-                src="images/logo.png"
-                alt="MOMAX"
-                class="loader-logo">
-
-            <h2>
-                MOMAX
-            </h2>
-
-            <span>
-                جاري التحميل...
-            </span>
-
-        </div>
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- 3D BACKGROUND -->
-    <!-- ========================= -->
-
-    <div class="background-wrapper">
-
-        <div class="grid-background"></div>
-
-        <div class="glow glow-1"></div>
-
-        <div class="glow glow-2"></div>
-
-        <div class="glow glow-3"></div>
-
-        <div class="particles-container">
-
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-            <span class="particle"></span>
-
-        </div>
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- TOP BAR -->
-    <!-- ========================= -->
-
-    <div class="top-bar">
-
-        <p>
-
-            اطلب موماكس ، تلقى الجودة ماكس
-
-        </p>
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- CART OVERLAY -->
-    <!-- ========================= -->
-
-    <div
-        id="cartOverlay"
-        class="cart-overlay">
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- PRODUCT OVERLAY -->
-    <!-- ========================= -->
-
-    <div
-        id="modalOverlay"
-        class="modal-overlay">
-
-    </div>
-
-    <!-- ========================= -->
-    <!-- HEADER -->
-    <!-- ========================= -->
+<body>
 
     <header class="header">
-
-        <div class="container">
-
-            <div class="header-content">
-
-                <!-- LOGO -->
-
-                <div class="logo-wrapper">
-
-                    <img
-                        src="images/logo.png"
-                        alt="MOMAX"
-                        class="logo">
-
-                    <div class="brand-info">
-
-                        <h1>
-
-                         وكالة موماكس
-
-                        </h1>
-
-                        <span>
-
-                            وكالة موماكس للإكسسوارات الإلكترونية
-
-                        </span>
-
-                    </div>
-
-                </div>
-
-                <!-- SEARCH -->
-
-                <div class="search-wrapper">
-
-                    <input
-                        type="text"
-                        id="searchInput"
-                        class="search-input"
-                        placeholder="ابحث عن منتج...">
-
-                </div>
-
-                <!-- ACTIONS -->
-
-                <div class="header-actions">
-
-                    <!-- THEME SWITCH -->
-
-                    <button
-                        id="themeToggle"
-                        class="theme-toggle">
-
-                        🌙
-
-                    </button>
-
-                    <!-- CART BUTTON -->
-
-                    <button
-                        id="openCartBtn"
-                        class="cart-button">
-
-                        <span>
-
-                            السلة
-
-                        </span>
-
-                        <strong id="cartCount">
-
-                            0
-
-                        </strong>
-
-                    </button>
-
-                </div>
-
+        <div class="header-top container">
+            <div class="logo-area">
+                <img src="images/logo.png" alt="MOMAX Logo" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCI+PHJlY3Qgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiBmaWxsPSIjZWVlIi8+PC9zdmc+'">
+                <h1 class="brand-name">موماكس</h1>
             </div>
-
+            <div class="desktop-actions">
+                <button id="themeToggleBtn" class="icon-btn" aria-label="Toggle Theme">🌙</button>
+                <button id="desktopCartBtn" class="cart-btn" aria-label="Open Cart">
+                    🛒 <span class="cart-badge">0</span>
+                </button>
+            </div>
+        </div>
+        
+        <div class="search-container container">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="ابحث بالاسم أو برقم المنتج (ID)..." aria-label="Search products">
+            </div>
         </div>
 
+        <div class="categories-wrapper">
+            <div class="categories-scroll container" id="categoriesContainer">
+                </div>
+        </div>
     </header>
 
-    <!-- ========================= -->
-    <!-- HERO -->
-    <!-- ========================= -->
-
-    <section class="hero">
-
-        <div class="container">
-
-            <div class="hero-content">
-
-                <img
-    src="images/momax-title.png"
-    alt="موماكس | MOMAX"
-    class="hero-title-image">
-
-                <p class="hero-description">
-
-                    أفضل الإكسسوارات الإلكترونية
-                    بجودة عالية وأسعار مميزة
-
-                </p>
-
-                <div class="hero-buttons">
-
-                    <a
-                        href="#productsSection"
-                        class="hero-btn primary-btn">
-
-                        استعرض المنتجات
-
-                    </a>
-
-                    <a
-                        href="#"
-                        id="heroWhatsappBtn"
-                        class="hero-btn secondary-btn">
-
-                        واتساب
-
-                    </a>
-
-                </div>
-
+    <main class="main-content container">
+        <div class="product-grid" id="productGrid">
             </div>
-
+        
+        <div id="noResults" class="no-results hidden">
+            <span class="no-results-icon">📦</span>
+            <h3>لم يتم العثور على منتجات</h3>
+            <p>جرب البحث بكلمات مختلفة أو تحقق من رقم المنتج.</p>
         </div>
+    </main>
 
-    </section>
-
-        <!-- ========================= -->
-    <!-- STATS -->
-    <!-- ========================= -->
-
-    <section class="stats-section">
-
-        <div class="container">
-
-            <div class="stats-grid">
-
-                <div class="stat-card">
-
-                    <h3>
-                        +211
-                    </h3>
-
-                    <p>
-                        منتج
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <h3>
-                        100%
-                    </h3>
-
-                    <p>
-                        جودة
-                    </p>
-
-                </div>
-
-                <div class="stat-card">
-
-                    <h3>
-                        24/7
-                    </h3>
-
-                    <p>
-                        دعم العملاء
-                    </p>
-
-                </div>
-
-            </div>
-
+    <div id="productSheetOverlay" class="overlay hidden"></div>
+    <div id="productSheet" class="bottom-sheet hidden">
+        <div class="sheet-header">
+            <div class="sheet-handle"></div>
+            <button id="closeSheetBtn" class="close-btn" aria-label="Close">✕</button>
         </div>
-
-    </section>
-
-    <!-- ========================= -->
-    <!-- CATEGORIES -->
-    <!-- ========================= -->
-
-    <section class="categories-section">
-
-        <div class="container">
-
-            <div class="section-heading">
-
-                <h2>
-
-                    التصنيفات
-
-                </h2>
-
-                <p>
-
-                    اختر القسم الذي تريد استعراضه
-
-                </p>
-
+        <div class="sheet-content" id="sheetContent">
             </div>
-
-            <div
-                id="categories"
-                class="categories-scroll">
-
-                <button
-                    class="category-btn active"
-                    data-category="الكل">
-
-                    الكل
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="شواحن كهرباء و طاقة">
-
-                    شواحن كهرباء و طاقة
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="شواحن سيارة و mp3">
-
-                    شواحن سيارة و mp3
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="تواصيل">
-
-                   تواصيل
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="سماعات">
-
-                    سماعات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="مكبرات MP3 و راديو">
-
-                    مكبرات MP3 و راديو
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="ذواكر و فلاشات">
-
-                    ذواكر و فلاشات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="مستلزمات الكمبيوتر">
-
-                    مستلزمات الكمبيوتر
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="كشافات">
-
-                    كشافات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="خوازن طاقة وبطاريات">
-
-                    خوازن طاقة وبطاريات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="لواصق">
-
-                    لواصق
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="لمبات">
-
-                    لمبات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="ريموتات و رسيفرات">
-
-                    ريموتات و رسيفرات
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="شنط و حبال">
-
-                   شنط و حبال
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="مكاين حلاقة و مراوح">
-
-                    مكاين حلاقة و مراوح
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="قوارئ و نواسخ">
-
-                  قوارئ و نواسخ
-
-                </button>
-
-                <button
-                    class="category-btn"
-                    data-category="أخرى">
-
-                    أخرى
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- ========================= -->
-    <!-- PRODUCTS -->
-    <!-- ========================= -->
-
-    <section
-        id="productsSection"
-        class="products-section">
-
-        <div class="container">
-
-            <div class="section-heading">
-
-                <h2>
-
-                    منتجات موماكس
-
-                </h2>
-
-                <p>
-
-                    أحدث الإكسسوارات الإلكترونية المختارة بعناية
-
-                </p>
-
-            </div>
-
-            <div
-                id="productsGrid"
-                class="products-grid">
-
-            </div>
-
-        </div>
-
-    </section>
-
-    <!-- ========================= -->
-    <!-- PRODUCT MODAL -->
-    <!-- ========================= -->
-
-    <div
-        id="productModal"
-        class="product-modal">
-
-        <div class="product-modal-box">
-
-            <button
-                id="closeModalBtn"
-                class="modal-close-btn">
-
-                ✕
-
-            </button>
-
-            <div
-                id="modalBody"
-                class="modal-body">
-
-            </div>
-
-        </div>
-
     </div>
 
-    <!-- ========================= -->
-    <!-- CART DRAWER -->
-    <!-- ========================= -->
-
-    <aside
-        id="cartDrawer"
-        class="cart-drawer">
-
+    <div id="cartDrawerOverlay" class="overlay hidden"></div>
+    <div id="cartDrawer" class="cart-drawer hidden">
         <div class="cart-header">
-
-            <h2>
-
-                سلة المشتريات
-
-            </h2>
-
-            <button
-                id="closeCartBtn"
-                class="cart-close-btn">
-
-                ✕
-
-            </button>
-
+            <h2>سلة المشتريات</h2>
+            <button id="closeCartBtn" class="close-btn" aria-label="Close Cart">✕</button>
         </div>
-
-        <div
-            id="cartItems"
-            class="cart-items">
-
-        </div>
-
-        <div class="cart-footer">
-
-            <div class="cart-total">
-
-                <span>
-
-                    الإجمالي
-
-                </span>
-
-                <strong id="cartTotal">
-
-                    0
-
-                </strong>
-
+        <div class="cart-items" id="cartItemsContainer">
             </div>
-
-            <button
-                id="clearCartBtn"
-                class="clear-cart-btn">
-
-                إفراغ السلة
-
-            </button>
-
-            <button
-                id="whatsappOrderBtn"
-                class="whatsapp-order-btn">
-
-                إرسال الطلب عبر واتساب
-
-            </button>
-
+        <div class="cart-footer">
+            <div class="cart-summary">
+                <span>الإجمالي:</span>
+                <strong class="total-price" id="cartTotal">0 ر.ي</strong>
+            </div>
+            <div class="cart-actions">
+                <button id="clearCartBtn" class="btn btn-outline">إفراغ السلة</button>
+                <button id="whatsappCheckoutBtn" class="btn btn-primary">إرسال الطلب عبر واتساب 💬</button>
+            </div>
         </div>
+    </div>
 
-    </aside>
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="window.scrollTo(0,0)">
+            <span class="nav-icon">🏠</span>
+            <span class="nav-text">الرئيسية</span>
+        </button>
+        <button class="nav-item" id="mobileSearchBtn">
+            <span class="nav-icon">🔍</span>
+            <span class="nav-text">بحث</span>
+        </button>
+        <button class="nav-item" id="mobileCartBtn">
+            <div class="nav-icon-wrapper">
+                <span class="nav-icon">🛒</span>
+                <span class="cart-badge mobile-badge">0</span>
+            </div>
+            <span class="nav-text">السلة</span>
+        </button>
+        <button class="nav-item" id="mobileWhatsappBtn">
+            <span class="nav-icon">💬</span>
+            <span class="nav-text">واتساب</span>
+        </button>
+    </nav>
 
-    <!-- ========================= -->
-    <!-- FLOATING BUTTON -->
-    <!-- ========================= -->
-
-    <button
-        id="floatingWhatsapp"
-        class="floating-whatsapp">
-
-        💬
-
-    </button>
-
-    <!-- ========================= -->
-    <!-- FOOTER -->
-    <!-- ========================= -->
+    <button id="backToTopBtn" class="back-to-top hidden" aria-label="Back to Top">⬆️</button>
 
     <footer class="footer">
-
         <div class="container">
-
-            <div class="footer-content">
-
-                <img
-                    src="images/logo.png"
-                    alt="MOMAX"
-                    class="footer-logo">
-
-                <h3>
-
-                    MOMAX | موماكس
-
-                </h3>
-
-                <p>
-
-                    أفضل الإكسسوارات الإلكترونية
-                    بجودة عالية وأسعار مميزة
-
-                </p>
-
-                <span>
-
-                    اطلب موماكس ، تلقى الجودة ماكس
-
-                </span>
-
-            </div>
-
+            <p>موماكس © 2026. الجودة ماكس.</p>
         </div>
-
     </footer>
 
-    <!-- ========================= -->
-    <!-- JAVASCRIPT -->
-    <!-- ========================= -->
-
     <script src="products.js"></script>
-
     <script src="app.js"></script>
-
-<button id="floatingCart" class="floating-cart">
-
-    <span class="floating-cart-icon">
-        🛒
-    </span>
-
-    <span
-        id="floatingCartCount"
-        class="floating-cart-count">
-
-        0
-
-    </span>
-
-</button>
-
 </body>
-
 </html>
