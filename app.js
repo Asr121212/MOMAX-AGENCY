@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         searchEmptyState.classList.add('hidden');
         
-        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading) لتحسين تجربة المستخدم الملموسة
+        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading)
         productsDynamicGrid.innerHTML = matchingProducts.map(() => `
             <div class="product-card-3d">
                 <div class="card-image-view-3d"><div class="skeleton-box skeleton-img-placeholder"></div></div>
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `).join('');
 
-        // حقن المنتجات الحقيقية بعد جزء من الثانية لمنح المتصفح انسيابية في التقديم والـ Lazy Loading
+        // حقن المنتجات الحقيقية
         setTimeout(() => {
             productsDynamicGrid.innerHTML = matchingProducts.map(prod => `
                 <div class="product-card-3d" onclick="triggerProductBottomSheet(${prod.id})">
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 120);
     }
 
-    // تفعيل خاصية الـ Lazy Loading الانسيابية للصور عند الاقتراب من الشاشة
+    // تفعيل خاصية الـ Lazy Loading
     function activateIntersectionLazyLoading() {
         const structuralImages = document.querySelectorAll('img[data-src]');
         const observerInstance = new IntersectionObserver((entries, self) => {
@@ -157,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
         commitBagToLocalStorage();
         syncCartStateWithUI();
         
-        // إشعار بصري سريع على زر الإضافة لتأكيد العملية
+        // إشعار بصري سريع
         if (event && event.target && event.target.classList.contains('card-add-to-cart-btn')) {
             const btn = event.target;
             btn.innerText = '✓';
@@ -190,7 +190,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function syncCartStateWithUI() {
         const totalItemsCount = userShoppingBag.reduce((acc, current) => acc + current.quantity, 0);
-        // حساب السعر الإجمالي (إذا وجد منتج بدون سعر من المجلد نعتبر قيمته 0 لمنع حدوث أخطاء حسابية NaN)
         const aggregatedPrice = userShoppingBag.reduce((acc, current) => acc + ((current.price || 0) * current.quantity), 0);
         
         totalCartCountBadges.forEach(badge => {
@@ -229,13 +228,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================
-    // بناء ورقة تفاصيل المنتج واستعراض الوصف الكامل من المجلد
+    // بناء ورقة تفاصيل المنتج
     // =================================================
     window.triggerProductBottomSheet = (id) => {
         const prod = products.find(p => p.id === id);
         if (!prod) return;
 
-        // التحقق من وجود وصف للمنتج أو تزويده بعبارة تسويقية فخمة إذا لم يضاف له بعد
         const productDescription = prod.description ? prod.description.trim() : "طلبك المميّز من متجر موماكس الرسمي، مصنّع من أفضل المواد وبأعلى معايير الجودة العالمية التي نضمنها لك دائماً.";
 
         productSheetInteractiveContent.innerHTML = `
@@ -274,10 +272,9 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // =================================================
-    // مستمعي الأحداث والربط العام للواجهات (Event Listeners)
+    // مستمعي الأحداث والربط العام للواجهات
     // =================================================
     function registerGlobalEventListeners() {
-        // الفلترة بالضغط على رقاقات التصنيفات أفقياً
         categoriesChipsWrapper.addEventListener('click', (e) => {
             const targetBtn = e.target.closest('.category-chip');
             if (targetBtn) {
@@ -287,7 +284,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // رصد مدخلات حقل البحث والتعامل مع زر المسح السريع
         productSearchInput.addEventListener('input', (e) => {
             realTimeSearchQuery = e.target.value;
             if(realTimeSearchQuery.length > 0) {
@@ -306,7 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
             productSearchInput.focus();
         });
 
-        // منطق النوافذ المنزلقة والأدراج الجانبية للسلة
         const launchCartDrawer = () => {
             shoppingCartDrawer.classList.remove('hidden');
             cartDrawerDimOverlay.classList.remove('hidden');
@@ -325,7 +320,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('closeCartDrawerBtn').addEventListener('click', dismissCartDrawer);
         cartDrawerDimOverlay.addEventListener('click', dismissCartDrawer);
 
-        // إفراغ السلة
         document.getElementById('clearEntireCartBtn').addEventListener('click', () => {
             if(confirm('هل أنت متأكد من رغبتك في إفراغ محتويات السلة بالكامل؟')) {
                 userShoppingBag = [];
@@ -334,9 +328,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // =================================================
-        // معالجة وإرسال رسالة واتساب المؤتمتة بالـ ID والكمية
-        // =================================================
+        // رسالة واتساب المؤتمتة
         document.getElementById('sendOrderToWhatsappBtn').addEventListener('click', () => {
             if (userShoppingBag.length === 0) return alert('سلتك فارغة! يرجى إضافة المنتجات أولاً.');
             
@@ -354,11 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
             messageBuffer += `💰 *إجمالي قيمة المنتجات:* ${totalSumText}%0A%0A`;
             messageBuffer += "يرجى تأكيد استلام الطلب وتجهيزه للشحن.";
             
-            // التوجيه المباشر لرقم الواتساب الخاص بك المرفق في الطلب
             window.open(`https://wa.me/967772748881?text=${messageBuffer}`, '_blank');
         });
 
-        // محفزات عناصر التحكم السفلية للموبايل
         document.getElementById('mobileSearchFocusTrigger').addEventListener('click', () => {
             window.scrollTo({ top: 0, behavior: 'smooth' });
             productSearchInput.focus();
@@ -368,11 +358,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open('https://wa.me/967772748881', '_blank');
         });
 
-        // إغلاق ورقة تفاصيل المنتج السفلية
         document.getElementById('closeSheetCross').addEventListener('click', dismissProductBottomSheet);
         sheetDimOverlay.addEventListener('click', dismissProductBottomSheet);
 
-        // زر التحليق والعودة إلى الأعلى
         const bttFloatingBtn = document.getElementById('scrollToTopFloatingBtn');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 450) {
@@ -383,7 +371,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         bttFloatingBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         
-        // مفتاح التحكم في الوضع الليلي
         document.getElementById('themeToggle').addEventListener('click', () => {
             document.body.classList.toggle('theme-dark');
             const isDarkActive = document.body.classList.contains('theme-dark');
@@ -393,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================
-    // تهيئة ميكانيكية وتناسق الوضع الليلي
+    // تهيئة الوضع الليلي
     // =================================================
     function setupThemeMechanics() {
         const preferredTheme = localStorage.getItem('momax_theme_preference');
@@ -410,6 +397,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // تشغيل الموقع الفوري وبدء المعالجة
     bootstrapStore();
 });
