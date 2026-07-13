@@ -175,7 +175,7 @@ body {
 
 /* تنسيق صورة النص (العنوان) */
 .brand-logo-text {
-    height: 28px; /* ارتفاع أقل بقليل من الأيقونة ليكون متناسقاً */
+    height: 48px; /* ارتفاع أقل بقليل من الأيقونة ليكون متناسقاً */
     width: auto;
     object-fit: contain;
     mix-blend-mode: multiply;
