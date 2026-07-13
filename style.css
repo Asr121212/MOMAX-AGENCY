@@ -318,7 +318,7 @@ body.theme-dark .brand-logo-text {
 }
 
 /* ================================================= */
-/* شبكة المنتجات وتأثير الـ 3D المذهل */
+/* شبكة المنتجات وتأثير الرفع الناعم (بدون مشاكل 3D) */
 /* ================================================= */
 .main-storefront {
     padding-top: 20px;
@@ -327,7 +327,6 @@ body.theme-dark .brand-logo-text {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    perspective: 1000px;
 }
 
 .product-card-3d {
@@ -341,12 +340,12 @@ body.theme-dark .brand-logo-text {
     position: relative;
     cursor: pointer;
     box-shadow: var(--shadow-flat);
-    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.4s ease;
-    transform-style: preserve-3d;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+/* تأثير الرفع المتوافق تماماً مع الجوال بدون تشوه */
 .product-card-3d:hover, .product-card-3d:active {
-    transform: translateY(-5px) rotateX(4deg) rotateY(-4deg);
+    transform: translateY(-4px);
     box-shadow: var(--shadow-3d-lift);
     border-color: var(--brand-primary);
 }
@@ -361,7 +360,6 @@ body.theme-dark .brand-logo-text {
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid var(--border-line);
-    transform: translateZ(20px);
 }
 .card-image-view-3d img {
     max-width: 100%;
@@ -375,7 +373,7 @@ body.theme-dark .brand-logo-text {
     opacity: 1;
 }
 .product-card-3d:hover .card-image-view-3d img {
-    transform: scale(1.06);
+    transform: scale(1.05); /* تكبير الصورة قليلاً عند اللمس */
 }
 
 .card-info-details {
@@ -383,7 +381,6 @@ body.theme-dark .brand-logo-text {
     display: flex;
     flex-direction: column;
     flex-grow: 1; /* دفع الأجزاء السفلية للأسفل لتوحيد الطول */
-    transform: translateZ(10px);
 }
 .card-brand-tag {
     font-size: 0.7rem;
@@ -419,6 +416,7 @@ body.theme-dark .brand-logo-text {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
 }
 .card-price-text {
     font-size: 1.05rem;
