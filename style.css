@@ -347,27 +347,26 @@ body.theme-dark .brand-logo-text {
     border-color: var(--brand-primary);
 }
 
-/* 1. توحيد مقاسات الصور (السر هنا) */
+/* 1. توحيد مقاسات الصور بشكل إجباري وثابت */
 .card-image-view-3d {
     width: 100%;
-    aspect-ratio: 1 / 1; /* جعل المربع متساوي الأضلاع */
+    height: 170px; /* هذا هو السحر: ارتفاع ثابت يمنع أي تفاوت */
     background-color: #FFFFFF;
     padding: 12px;
-    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
     border-bottom: 1px solid var(--border-line);
+    overflow: hidden;
 }
 
 .card-image-view-3d img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain; /* يمنع تمدد الصورة ويضبطها داخل المربع */
+    max-width: 100%;
+    max-height: 100%; /* إجبار الصورة على عدم تجاوز الارتفاع الثابت */
+    object-fit: contain; /* يحافظ على دقة الصورة بدون تمطيط */
     mix-blend-mode: multiply;
     transition: transform 0.3s ease;
 }
-
 .product-card-3d:hover .card-image-view-3d img {
     transform: scale(1.05);
 }
