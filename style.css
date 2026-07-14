@@ -184,8 +184,8 @@ body {
 /* التوافق مع الوضع الليلي للصورتين */
 body.theme-dark .brand-logo-icon,
 body.theme-dark .brand-logo-text {
-    mix-blend-mode: screen; 
-    filter: brightness(1.2);
+    mix-blend-mode: screen !important; 
+    filter: brightness(1.2) !important;
 }
 
 /* أزرار التحكم في الهيدر */
@@ -897,27 +897,17 @@ body.theme-dark .brand-logo-text {
 }
     
 /* ================================================= */
-/* الحل النهائي لظهور الصور في الوضع الليلي */
+/* الحل النهائي لظهور صور المنتجات في الوضع الليلي */
 /* ================================================= */
 
 body.theme-dark .cart-item-thumbnail,
 body.theme-dark .card-image-view-3d img,
-body.theme-dark .sheet-product-gallery-3d img,
-body.theme-dark .brand-logo-icon,
-body.theme-dark .brand-logo-text {
-    /* 1. إجبار الخلفية لتكون بيضاء وتجاوز الدمج */
+body.theme-dark .sheet-product-gallery-3d img {
+    /* تطبيق الحل على المنتجات فقط لمنع التعتيم */
     background-color: #FFFFFF !important;
-    
-    /* 2. إيقاف دمج الألوان مع الخلفية الداكنة */
     mix-blend-mode: normal !important;
-    
-    /* 3. عزل العنصر بصرياً */
     isolation: isolate !important;
-    
-    /* 4. إزالة أي فلاتر تظليل إضافية */
     -webkit-filter: none !important;
     filter: none !important;
-    
-    /* 5. الحفاظ على المخطط اللوني الفاتح للصورة */
     color-scheme: light !important;
 }
