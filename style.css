@@ -895,3 +895,16 @@ body.theme-dark .brand-logo-text {
     }
     .sheet-product-gallery-3d { margin: 0; max-width: 100%; }
 }
+/* ================================================= */
+/* إصلاح صور المنتجات داخل السلة (للوضع الليلي والنهاري) */
+/* ================================================= */
+#cartItems img {
+    background-color: #FFFFFF !important; /* إجبار المربع على اللون الأبيض دائماً */
+    mix-blend-mode: normal !important; /* إلغاء أي دمج لوني يشوه الصورة في الظلام */
+    padding: 6px; /* مسافة جمالية حول صورة المنتج */
+    border-radius: var(--radius-sm); /* إضافة حواف دائرية أنيقة */
+    object-fit: contain; /* الحفاظ على دقة الصورة بدون تمطيط */
+    width: 60px; /* تأكيد عرض الصورة (يمكنك تعديل الرقم حسب تصميم سلتك) */
+    height: 60px; /* تأكيد ارتفاع الصورة */
+    border: 1px solid var(--border-line); /* إطار خفيف جداً يبرز الصورة */
+}
