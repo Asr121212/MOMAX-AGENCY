@@ -896,13 +896,23 @@ body.theme-dark .brand-logo-text {
     .sheet-product-gallery-3d { margin: 0; max-width: 100%; }
     
 /* ================================================= */
-/* حل مشكلة تشوه وعكس ألوان الصور في الوضع الليلي */
+/* الحل النهائي والأقوى لخداع متصفحات الجوال في الوضع الليلي */
 /* ================================================= */
-#cartItems .cart-item img,
-body.theme-dark .cart-item img {
-    background-color: #ffffff !important;
-    mix-blend-mode: normal !important;
-    filter: none !important; 
-    -webkit-filter: none !important;
+.cart-item img, 
+.product-image img, 
+.modal-image img {
+    /* 1. استخدام أبيض "كاذب" أو بشفافية 99% لتجاوز رادار المتصفح */
+    background-color: rgba(255, 255, 255, 0.99) !important; 
+    
+    /* 2. عزل العنصر في طبقة رسومية منفصلة (Hardware Acceleration) */
+    transform: translate3d(0, 0, 0) !important; 
     isolation: isolate !important;
+    
+    /* 3. منع أي دمج لوني إجباري */
+    mix-blend-mode: normal !important;
+    -webkit-filter: drop-shadow(0 0 0 rgba(0,0,0,0)) !important;
+    filter: drop-shadow(0 0 0 rgba(0,0,0,0)) !important;
+    
+    /* 4. الحفاظ على المخطط اللوني الفاتح */
+    color-scheme: light !important;
 }
