@@ -896,12 +896,13 @@ body.theme-dark .brand-logo-text {
     .sheet-product-gallery-3d { margin: 0; max-width: 100%; }
 }
 /* ================================================= */
-/* حل مشكلة تشوه وعكس ألوان الصور في الوضع الليلي التلقائي */
+/* حل مشكلة تشوه وعكس ألوان الصور في الوضع الليلي */
 /* ================================================= */
-.cart-item img, 
-.product-image img, 
-.modal-image img {
-    color-scheme: only light !important; /* يمنع المتصفح نهائياً من عكس ألوان الصورة والخلفية */
-    background-color: #ffffff !important; /* الحفاظ على الخلفية البيضاء النقية لتبدو كبطاقة */
-    mix-blend-mode: normal !important; /* إلغاء أي دمج لوني قد يتسبب فيه المتصفح */
+#cartItems .cart-item img,
+body.theme-dark .cart-item img {
+    background-color: #ffffff !important;
+    mix-blend-mode: normal !important;
+    filter: none !important; 
+    -webkit-filter: none !important;
+    isolation: isolate !important;
 }
