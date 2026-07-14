@@ -894,25 +894,30 @@ body.theme-dark .brand-logo-text {
         padding: 30px;
     }
     .sheet-product-gallery-3d { margin: 0; max-width: 100%; }
+}
     
 /* ================================================= */
-/* الحل النهائي والأقوى لخداع متصفحات الجوال في الوضع الليلي */
+/* الحل النهائي لظهور الصور في الوضع الليلي */
 /* ================================================= */
-.cart-item img, 
-.product-image img, 
-.modal-image img {
-    /* 1. استخدام أبيض "كاذب" أو بشفافية 99% لتجاوز رادار المتصفح */
-    background-color: rgba(255, 255, 255, 0.99) !important; 
+
+body.theme-dark .cart-item-thumbnail,
+body.theme-dark .card-image-view-3d img,
+body.theme-dark .sheet-product-gallery-3d img,
+body.theme-dark .brand-logo-icon,
+body.theme-dark .brand-logo-text {
+    /* 1. إجبار الخلفية لتكون بيضاء وتجاوز الدمج */
+    background-color: #FFFFFF !important;
     
-    /* 2. عزل العنصر في طبقة رسومية منفصلة (Hardware Acceleration) */
-    transform: translate3d(0, 0, 0) !important; 
+    /* 2. إيقاف دمج الألوان مع الخلفية الداكنة */
+    mix-blend-mode: normal !important;
+    
+    /* 3. عزل العنصر بصرياً */
     isolation: isolate !important;
     
-    /* 3. منع أي دمج لوني إجباري */
-    mix-blend-mode: normal !important;
-    -webkit-filter: drop-shadow(0 0 0 rgba(0,0,0,0)) !important;
-    filter: drop-shadow(0 0 0 rgba(0,0,0,0)) !important;
+    /* 4. إزالة أي فلاتر تظليل إضافية */
+    -webkit-filter: none !important;
+    filter: none !important;
     
-    /* 4. الحفاظ على المخطط اللوني الفاتح */
+    /* 5. الحفاظ على المخطط اللوني الفاتح للصورة */
     color-scheme: light !important;
 }
