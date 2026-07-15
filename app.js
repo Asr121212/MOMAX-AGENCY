@@ -125,51 +125,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================
-    // بناء وعرض المنتجات بالتأثير ثلاثي الأبعاد والـ Skeletons
+    // بناء وعرض المنتجات مع دعم العناوين الفرعية
     // =================================================
-    function renderProductsView() {let groupedProducts = null;
-let matchingProducts = [];
+    function renderProductsView() {
+        let groupedProducts = null;
+        let matchingProducts = [];
 
-if (
-    selectedActiveCategory !== "الكل" &&
-    customCategoryGroups[selectedActiveCategory]
-) {
+        if (
+            selectedActiveCategory !== "الكل" &&
+            customCategoryGroups[selectedActiveCategory]
+        ) {
+            groupedProducts = getCategoryGroups(selectedActiveCategory);
 
-    groupedProducts = getCategoryGroups(selectedActiveCategory);
+            // فلترة المنتجات داخل المجموعات في حالة البحث
+            groupedProducts.forEach(group => {
+                group.products = group.products.filter(product => {
+                    return (
+                        product.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) ||
+                        product.id.toString() === realTimeSearchQuery.trim() ||
+                        realTimeSearchQuery.trim() === ""
+                    );
+                });
+            });
 
-    groupedProducts.forEach(group => {
+            // إخفاء المجموعات التي تصبح فارغة أثناء البحث
+            groupedProducts = groupedProducts.filter(group => group.products.length > 0);
 
-        group.products = group.products.filter(product => {
+            // نجمع المنتجات لمعرفة ما إذا كانت النتيجة الإجمالية صفر
+            matchingProducts = groupedProducts.flatMap(group => group.products);
 
-            return (
-                product.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) ||
-                product.id.toString() === realTimeSearchQuery.trim() ||
-                realTimeSearchQuery.trim() === ""
-            );
-
-        });
-
-    });
-
-    matchingProducts = groupedProducts.flatMap(group => group.products);
-
-} else {
-
-    matchingProducts = products.filter(item => {
-
-        const isCategoryMatch =
-            selectedActiveCategory === "الكل" ||
-            item.category === selectedActiveCategory;
-
-        const isSearchMatch =
-            item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) ||
-            item.id.toString() === realTimeSearchQuery.trim();
-
-        return isCategoryMatch && isSearchMatch;
-
-    });
-
-}
+        } else {
+            // المعالجة العادية للأقسام التي ليس لها مجموعات فرعية
+            matchingProducts = products.filter(item => {
+                const isCategoryMatch = selectedActiveCategory === "الكل" || item.category === selectedActiveCategory;
+                const isSearchMatch = item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) || item.id.toString() === realTimeSearchQuery.trim();
+                return isCategoryMatch && isSearchMatch;
+            });
+        }
 
         if (matchingProducts.length === 0) {
             productsDynamicGrid.innerHTML = '';
@@ -179,8 +171,14 @@ if (
 
         searchEmptyState.classList.add('hidden');
         
-        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading)
-        productsDynamicGrid.innerHTML = matchingProducts.map(() => `
+        // قوالب HTML لتجنب التكرار
+        const getGroupHeaderHTML = (title) => `
+            <div style="grid-column: 1 / -1; width: 100%; border-bottom: 2px solid rgba(150,150,150,0.3); margin: 15px 0 10px 0; padding-bottom: 8px; text-align: right;">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: bold; color: inherit;">${title}</h3>
+            </div>
+        `;
+
+        const getSkeletonHTML = () => `
             <div class="product-card-3d">
                 <div class="card-image-view-3d"><div class="skeleton-box skeleton-img-placeholder"></div></div>
                 <div class="card-info-details">
@@ -193,27 +191,44 @@ if (
                     </div>
                 </div>
             </div>
-        `).join('');
+        `;
+
+        const getProductHTML = (prod) => `
+            <div class="product-card-3d" onclick="triggerProductBottomSheet(${prod.id})">
+                <div class="card-image-view-3d">
+                    <div class="skeleton-box skeleton-img-placeholder"></div>
+                    <img data-src="${prod.image}" alt="${prod.name}" onload="this.classList.add('image-loaded'); this.previousElementSibling.remove();">
+                </div>
+                <div class="card-info-details">
+                    <div class="card-brand-tag">${prod.category}</div>
+                    <h3 class="card-product-title">${prod.name}</h3>
+                    <div class="card-id-badge">ID: ${prod.id}</div>
+                    <div class="card-footer-pricing">
+                        <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
+                        <button class="card-add-to-cart-btn" onclick="event.stopPropagation(); addItemToBag(${prod.id})">＋</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading) مع العناوين
+        if (groupedProducts) {
+            productsDynamicGrid.innerHTML = groupedProducts.map(group => 
+                getGroupHeaderHTML(group.title) + group.products.map(() => getSkeletonHTML()).join('')
+            ).join('');
+        } else {
+            productsDynamicGrid.innerHTML = matchingProducts.map(() => getSkeletonHTML()).join('');
+        }
 
         // حقن المنتجات الحقيقية
         setTimeout(() => {
-            productsDynamicGrid.innerHTML = matchingProducts.map(prod => `
-                <div class="product-card-3d" onclick="triggerProductBottomSheet(${prod.id})">
-                    <div class="card-image-view-3d">
-                        <div class="skeleton-box skeleton-img-placeholder"></div>
-                        <img data-src="${prod.image}" alt="${prod.name}" onload="this.classList.add('image-loaded'); this.previousElementSibling.remove();">
-                    </div>
-                    <div class="card-info-details">
-                        <div class="card-brand-tag">${prod.category}</div>
-                        <h3 class="card-product-title">${prod.name}</h3>
-                        <div class="card-id-badge">ID: ${prod.id}</div>
-                        <div class="card-footer-pricing">
-                            <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
-                            <button class="card-add-to-cart-btn" onclick="event.stopPropagation(); addItemToBag(${prod.id})">＋</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
+            if (groupedProducts) {
+                productsDynamicGrid.innerHTML = groupedProducts.map(group => 
+                    getGroupHeaderHTML(group.title) + group.products.map(prod => getProductHTML(prod)).join('')
+                ).join('');
+            } else {
+                productsDynamicGrid.innerHTML = matchingProducts.map(prod => getProductHTML(prod)).join('');
+            }
             activateIntersectionLazyLoading();
         }, 120);
     }
