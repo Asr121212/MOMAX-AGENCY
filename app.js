@@ -2,31 +2,65 @@
 /* 1. نظام تجميع المنتجات في الأقسام عبر الـ ID */
 /* ================================================= */
 const customCategoryGroups = {
-    "شواحن كهرباء و طاقة": [
-        {
-            subTitle: "⚡ شواحن كهرباء",
-            ids: [1, 3] // ضع هنا أرقام الآيدي لشواحن الكهرباء
-        },
-        {
-            subTitle: "🔋 شواحن طاقة",
-            ids: [2, 6, 16] // ضع هنا أرقام منتجات الطاقة
-        }
-    ],
-    "شواحن سيارة و MP3": [
-        {
-            subTitle: "🚗 شواحن سيارة",
-            ids: [4, 10]
-        },
-        {
-            subTitle: "🎵 مشغلات MP3",
-            ids: [8, 9]
-        }
-    ]
-    // يمكنك إضافة أي قسم جديد هنا مستقبلاً بنفس الطريقة
+
+    "شواحن كهرباء و طاقة": {
+
+        "شواحن كهرباء": [
+            1,3,9,10,11,24,26,27,28,29,30,31,
+            35,36,39,40,41,42,43,44,50,51,
+            81,94,95,99,102,103,104,106,
+            111,112,117,118,121,122,123,
+            125,126,127,128,129,130,
+            132,133,137,138,141,142,143,144
+        ],
+
+        "شواحن طاقة": [
+            18,32,96,97,113,145
+        ]
+
+    },
+
+    "شواحن سيارة و mp3": {
+
+        "شواحن سيارة": [
+            14,16,17,33,34,98,105
+        ],
+
+        "أجهزة MP3": [
+            15,72
+        ]
+
+    }
+
 };
 /* ================================================= */
 /* منطق تشغيل متجر موماكس V8 - VANILLA JS            */
 /* ================================================= */
+function getCategoryGroups(categoryName) {
+
+    const config = customCategoryGroups[categoryName];
+
+    // إذا لم يكن القسم يحتوي مجموعات
+    if (!config) return null;
+
+    const groups = [];
+
+    Object.entries(config).forEach(([groupTitle, ids]) => {
+
+        const items = ids
+            .map(id => products.find(product => product.id === id))
+            .filter(Boolean);
+
+        groups.push({
+            title: groupTitle,
+            products: items
+        });
+
+    });
+
+    return groups;
+
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     
@@ -93,14 +127,49 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================
     // بناء وعرض المنتجات بالتأثير ثلاثي الأبعاد والـ Skeletons
     // =================================================
-    function renderProductsView() {
-        // فلترة المنتجات بالاسم أو بمطابقة الـ ID المدخل بدقة
-        let matchingProducts = products.filter(item => {
-            const isCategoryMatch = selectedActiveCategory === 'الكل' || item.category === selectedActiveCategory;
-            const isSearchMatch = item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) || 
-                                  item.id.toString() === realTimeSearchQuery.trim();
-            return isCategoryMatch && isSearchMatch;
+    function renderProductsView() {let groupedProducts = null;
+let matchingProducts = [];
+
+if (
+    selectedActiveCategory !== "الكل" &&
+    customCategoryGroups[selectedActiveCategory]
+) {
+
+    groupedProducts = getCategoryGroups(selectedActiveCategory);
+
+    groupedProducts.forEach(group => {
+
+        group.products = group.products.filter(product => {
+
+            return (
+                product.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) ||
+                product.id.toString() === realTimeSearchQuery.trim() ||
+                realTimeSearchQuery.trim() === ""
+            );
+
         });
+
+    });
+
+    matchingProducts = groupedProducts.flatMap(group => group.products);
+
+} else {
+
+    matchingProducts = products.filter(item => {
+
+        const isCategoryMatch =
+            selectedActiveCategory === "الكل" ||
+            item.category === selectedActiveCategory;
+
+        const isSearchMatch =
+            item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) ||
+            item.id.toString() === realTimeSearchQuery.trim();
+
+        return isCategoryMatch && isSearchMatch;
+
+    });
+
+}
 
         if (matchingProducts.length === 0) {
             productsDynamicGrid.innerHTML = '';
