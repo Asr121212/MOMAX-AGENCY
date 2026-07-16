@@ -621,6 +621,33 @@ body.theme-dark .brand-logo-text {
 .shopping-cart-drawer.drawer-open-active {
     left: 0;
 }
+
+/* تنسيق زر إغلاق السلة المخصص (أعلى اليسار) */
+#closeCartDrawerBtn {
+    position: absolute;
+    top: 22px;
+    left: 20px;
+    width: 38px;
+    height: 38px;
+    background-color: var(--color-danger);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+    z-index: 2300;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.2s;
+}
+
+#closeCartDrawerBtn:active {
+    transform: scale(0.85);
+}
+
 .drawer-header-section {
     padding: 20px 16px;
     border-bottom: 1px solid var(--border-line);
