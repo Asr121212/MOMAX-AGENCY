@@ -188,7 +188,15 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
         `;
 
-        const getProductHTML = (prod) => `
+        const getProductHTML = (prod) => {
+            // فحص هل المنتج موجود مسبقاً في السلة؟
+            const isInCart = userShoppingBag.some(item => item.id === prod.id);
+            const btnText = isInCart ? '✓' : '＋';
+            
+            // إضافة ستايل أخضر إذا كان المنتج في السلة
+            const btnStyle = isInCart ? 'background: var(--color-success); box-shadow: 0 3px 8px rgba(34, 197, 94, 0.4);' : '';
+
+            return `
             <div class="product-card-3d" onclick="triggerProductBottomSheet(${prod.id})">
                 <div class="card-image-view-3d">
                     <div class="skeleton-box skeleton-img-placeholder"></div>
@@ -200,11 +208,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="card-id-badge">ID: ${prod.id}</div>
                     <div class="card-footer-pricing">
                         <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
-                        <button class="card-add-to-cart-btn" onclick="event.stopPropagation(); addItemToBag(${prod.id})">＋</button>
+                        <!-- تم التعديل هنا لربط الزر بوظيفة التبديل (الإضافة والحذف) -->
+                        <button class="card-add-to-cart-btn" data-product-id="${prod.id}" onclick="toggleCartItem(event, ${prod.id})" style="${btnStyle}">${btnText}</button>
                     </div>
                 </div>
             </div>
-        `;
+            `;
+        };
 
         // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading) مع العناوين
         if (groupedProducts) {
@@ -248,6 +258,28 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================
     // إدارة منطق السلة التفاعلية (Cart Logic)
     // =================================================
+
+    // الدالة الجديدة: التبديل بين إضافة وحذف المنتج من الشبكة مباشرة
+    window.toggleCartItem = (event, id) => {
+        event.stopPropagation(); // لمنع فتح نافذة تفاصيل المنتج عند ضغط الزر
+        const targetedProduct = products.find(p => p.id === id);
+        if (!targetedProduct) return;
+
+        const existingRowIndex = userShoppingBag.findIndex(item => item.id === id);
+
+        if (existingRowIndex > -1) {
+            // المنتج موجود في السلة -> قم بحذفه
+            userShoppingBag.splice(existingRowIndex, 1);
+        } else {
+            // المنتج غير موجود -> قم بإضافته (بكمية 1)
+            userShoppingBag.push({ ...targetedProduct, quantity: 1 });
+        }
+
+        commitBagToLocalStorage();
+        syncCartStateWithUI(); // ستتولى هذه الدالة تحديث الأزرار والأسعار تلقائياً
+    };
+
+    // الدالة الأصلية: للإضافة العادية أو زيادة الكمية (تُستخدم من ورقة التفاصيل)
     window.addItemToBag = (id) => {
         const targetedProduct = products.find(p => p.id === id);
         if (!targetedProduct) return;
@@ -261,13 +293,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         commitBagToLocalStorage();
         syncCartStateWithUI();
-        
-        // إشعار بصري سريع
-        if (event && event.target && event.target.classList.contains('card-add-to-cart-btn')) {
-            const btn = event.target;
-            btn.innerText = '✓';
-            setTimeout(() => btn.innerText = '＋', 800);
-        }
     };
 
     window.mutateRowQuantity = (id, changeAmount) => {
@@ -303,6 +328,24 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         cartTotalPriceSum.innerText = aggregatedPrice > 0 ? `${aggregatedPrice} ر.ي` : 'حسب الطلب';
+
+        // --- تحديث أزرار المنتجات في الصفحة الرئيسية (مزامنة فورية) ---
+        document.querySelectorAll('.card-add-to-cart-btn').forEach(btn => {
+            const prodId = parseInt(btn.getAttribute('data-product-id'));
+            if (prodId) {
+                const isInCart = userShoppingBag.some(item => item.id === prodId);
+                btn.innerText = isInCart ? '✓' : '＋';
+                
+                if (isInCart) {
+                    btn.style.background = 'var(--color-success)';
+                    btn.style.boxShadow = '0 3px 8px rgba(34, 197, 94, 0.4)';
+                } else {
+                    btn.style.background = ''; // يعود للون الافتراضي
+                    btn.style.boxShadow = '';
+                }
+            }
+        });
+        // ----------------------------------------------------
 
         if (userShoppingBag.length === 0) {
             cartDrawerItemsContainer.innerHTML = `
