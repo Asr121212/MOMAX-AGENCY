@@ -28,6 +28,7 @@ const customCategoryGroups = {
     }
 
 };
+
 /* ================================================= */
 /* منطق تشغيل متجر موماكس V8 - VANILLA JS            */
 /* ================================================= */
@@ -35,7 +36,7 @@ function getCategoryGroups(categoryName) {
 
     const config = customCategoryGroups[categoryName];
 
-    // إذا لم يكن القسم يحتوي مجموعات
+    // إذا لم يكن القسم موجوداً في التقسيمات
     if (!config) return null;
 
     const groups = [];
@@ -46,15 +47,21 @@ function getCategoryGroups(categoryName) {
             .map(id => products.find(product => product.id === id))
             .filter(Boolean);
 
-        groups.push({
-            title: groupTitle,
-            products: items
-        });
-
+        // تعديل: لا ننشئ المجموعة إلا إذا كانت تحتوي على منتجات فعلية
+        if (items.length > 0) {
+            groups.push({
+                title: groupTitle,
+                products: items
+            });
+        }
     });
 
-    return groups;
+    // تعديل: إذا تم حذف جميع الـ IDs أو المجموعات وأصبحت فارغة، نلغي التقسيم للعودة للوضع الطبيعي
+    if (groups.length === 0) {
+        return null; 
+    }
 
+    return groups;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -120,18 +127,20 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // =================================================
-    // بناء وعرض المنتجات مع دعم العناوين الفرعية
+    // بناء وعرض المنتجات مع دعم العناوين الفرعية والوضع التلقائي
     // =================================================
     function renderProductsView() {
         let groupedProducts = null;
         let matchingProducts = [];
 
-        if (
-            selectedActiveCategory !== "الكل" &&
-            customCategoryGroups[selectedActiveCategory]
-        ) {
+        // تعديل: المحاولة لإنشاء مجموعات مقسمة إذا كنا لسنا في قسم "الكل"
+        if (selectedActiveCategory !== "الكل") {
             groupedProducts = getCategoryGroups(selectedActiveCategory);
+        }
 
+        // إذا كان groupedProducts يحتوي على بيانات (لم يتم إرجاع null)
+        if (groupedProducts) {
+            
             // فلترة المنتجات داخل المجموعات في حالة البحث
             groupedProducts.forEach(group => {
                 group.products = group.products.filter(product => {
@@ -150,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
             matchingProducts = groupedProducts.flatMap(group => group.products);
 
         } else {
-            // المعالجة العادية للأقسام التي ليس لها مجموعات فرعية
+            // تعديل: المعالجة العادية (تعمل لقسم "الكل" أو للأقسام التي تم مسح أرقامها ID)
             matchingProducts = products.filter(item => {
                 const isCategoryMatch = selectedActiveCategory === "الكل" || item.category === selectedActiveCategory;
                 const isSearchMatch = item.name.toLowerCase().includes(realTimeSearchQuery.toLowerCase()) || item.id.toString() === realTimeSearchQuery.trim();
@@ -207,8 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3 class="card-product-title">${prod.name}</h3>
                     <div class="card-id-badge">ID: ${prod.id}</div>
                     <div class="card-footer-pricing">
-                        <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'التفاصيل'}</span>
-                        <!-- تم التعديل هنا لربط الزر بوظيفة التبديل (الإضافة والحذف) -->
+                        <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
                         <button class="card-add-to-cart-btn" data-product-id="${prod.id}" onclick="toggleCartItem(event, ${prod.id})" style="${btnStyle}">${btnText}</button>
                     </div>
                 </div>
@@ -216,7 +224,7 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         };
 
-        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading) مع العناوين
+        // إظهار بطاقات الهياكل التوقعية أولاً (Skeleton Loading)
         if (groupedProducts) {
             productsDynamicGrid.innerHTML = groupedProducts.map(group => 
                 getGroupHeaderHTML(group.title) + group.products.map(() => getSkeletonHTML()).join('')
@@ -258,28 +266,23 @@ document.addEventListener('DOMContentLoaded', () => {
     // =================================================
     // إدارة منطق السلة التفاعلية (Cart Logic)
     // =================================================
-
-    // الدالة الجديدة: التبديل بين إضافة وحذف المنتج من الشبكة مباشرة
     window.toggleCartItem = (event, id) => {
-        event.stopPropagation(); // لمنع فتح نافذة تفاصيل المنتج عند ضغط الزر
+        event.stopPropagation();
         const targetedProduct = products.find(p => p.id === id);
         if (!targetedProduct) return;
 
         const existingRowIndex = userShoppingBag.findIndex(item => item.id === id);
 
         if (existingRowIndex > -1) {
-            // المنتج موجود في السلة -> قم بحذفه
             userShoppingBag.splice(existingRowIndex, 1);
         } else {
-            // المنتج غير موجود -> قم بإضافته (بكمية 1)
             userShoppingBag.push({ ...targetedProduct, quantity: 1 });
         }
 
         commitBagToLocalStorage();
-        syncCartStateWithUI(); // ستتولى هذه الدالة تحديث الأزرار والأسعار تلقائياً
+        syncCartStateWithUI();
     };
 
-    // الدالة الأصلية: للإضافة العادية أو زيادة الكمية (تُستخدم من ورقة التفاصيل)
     window.addItemToBag = (id) => {
         const targetedProduct = products.find(p => p.id === id);
         if (!targetedProduct) return;
@@ -329,7 +332,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         cartTotalPriceSum.innerText = aggregatedPrice > 0 ? `${aggregatedPrice} ر.ي` : 'حسب الطلب';
 
-        // --- تحديث أزرار المنتجات في الصفحة الرئيسية (مزامنة فورية) ---
+        // تحديث أزرار المنتجات في الصفحة الرئيسية (مزامنة فورية)
         document.querySelectorAll('.card-add-to-cart-btn').forEach(btn => {
             const prodId = parseInt(btn.getAttribute('data-product-id'));
             if (prodId) {
@@ -340,12 +343,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     btn.style.background = 'var(--color-success)';
                     btn.style.boxShadow = '0 3px 8px rgba(34, 197, 94, 0.4)';
                 } else {
-                    btn.style.background = ''; // يعود للون الافتراضي
+                    btn.style.background = '';
                     btn.style.boxShadow = '';
                 }
             }
         });
-        // ----------------------------------------------------
 
         if (userShoppingBag.length === 0) {
             cartDrawerItemsContainer.innerHTML = `
