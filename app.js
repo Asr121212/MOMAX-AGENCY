@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <h3 class="card-product-title">${prod.name}</h3>
                     <div class="card-id-badge">ID: ${prod.id}</div>
                     <div class="card-footer-pricing">
-                        <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'عرض مميز'}</span>
+                        <span class="card-price-text">${prod.price ? prod.price + ' ر.ي' : 'التفاصيل'}</span>
                         <button class="card-add-to-cart-btn" data-product-id="${prod.id}" onclick="toggleCartItem(event, ${prod.id})" style="${btnStyle}">${btnText}</button>
                     </div>
                 </div>
